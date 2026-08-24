@@ -1,0 +1,909 @@
+<title>스폰지타임즈 3기 운영안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#EDEFEA;
+  --surface:#FFFFFF;
+  --surface-2:#F4F6F1;
+  --ink:#141C17;
+  --muted:#59685F;
+  --faint:#87948B;
+  --line:#D3D9D1;
+  --line-strong:#B6BFB6;
+  --accent:#A31E60;
+  --accent-ink:#A31E60;
+  --accent-soft:#F8E5EE;
+  --teal:#0E6459;
+  --teal-soft:#DDEDE8;
+  --amber:#8A5210;
+  --amber-soft:#F6E9D5;
+  --shadow:0 1px 2px rgba(20,28,23,.05), 0 8px 24px -16px rgba(20,28,23,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101512;
+    --surface:#171E19;
+    --surface-2:#1D2620;
+    --ink:#E6ECE5;
+    --muted:#97A69B;
+    --faint:#738178;
+    --line:#2A352D;
+    --line-strong:#3C4A40;
+    --accent:#F186B4;
+    --accent-ink:#F9A9CB;
+    --accent-soft:#38182A;
+    --teal:#59C8B4;
+    --teal-soft:#11322C;
+    --amber:#DFA75E;
+    --amber-soft:#33240F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101512;
+  --surface:#171E19;
+  --surface-2:#1D2620;
+  --ink:#E6ECE5;
+  --muted:#97A69B;
+  --faint:#738178;
+  --line:#2A352D;
+  --line-strong:#3C4A40;
+  --accent:#F186B4;
+  --accent-ink:#F9A9CB;
+  --accent-soft:#38182A;
+  --teal:#59C8B4;
+  --teal-soft:#11322C;
+  --amber:#DFA75E;
+  --amber-soft:#33240F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+  word-break:keep-all;
+}
+
+.wrap{
+  max-width:60rem;
+  margin:0 auto;
+  padding:0 1.5rem 6rem;
+}
+
+.prose{max-width:60ch}
+
+/* ---------- masthead ---------- */
+
+.masthead{
+  border-bottom:3px solid var(--ink);
+  padding:3.5rem 0 1.25rem;
+  margin-bottom:1rem;
+}
+.kicker{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--accent-ink);
+  margin:0 0 1.1rem;
+}
+.masthead h1{
+  font-family:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  font-weight:900;
+  font-size:clamp(2.4rem,7vw,4rem);
+  line-height:1.04;
+  letter-spacing:-.03em;
+  margin:0;
+  text-wrap:balance;
+}
+.masthead .sub{
+  margin:1.1rem 0 0;
+  font-size:1.05rem;
+  color:var(--muted);
+  max-width:52ch;
+}
+
+.factbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0;
+  border-bottom:1px solid var(--line);
+  margin-bottom:4rem;
+}
+.fact{
+  flex:1 1 8.5rem;
+  padding:.9rem 1rem .9rem 0;
+  border-right:1px solid var(--line);
+}
+.fact:last-child{border-right:0}
+.fact dt{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.66rem;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--faint);
+  margin:0 0 .2rem;
+}
+.fact dd{
+  margin:0;
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1rem;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------- sections ---------- */
+
+section{margin-bottom:4.5rem}
+
+.sec-head{
+  display:flex;
+  align-items:baseline;
+  gap:.85rem;
+  border-top:1px solid var(--line-strong);
+  padding-top:.9rem;
+  margin-bottom:1.6rem;
+}
+.sec-head .tag{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.68rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--faint);
+  white-space:nowrap;
+  padding-top:.35rem;
+}
+.sec-head h2{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:900;
+  font-size:clamp(1.5rem,3.4vw,2rem);
+  letter-spacing:-.025em;
+  line-height:1.2;
+  margin:0;
+  text-wrap:balance;
+}
+
+h3{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1.15rem;
+  letter-spacing:-.01em;
+  margin:2.4rem 0 .7rem;
+}
+h4{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-weight:600;
+  font-size:.72rem;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--faint);
+  margin:2rem 0 .6rem;
+}
+p{margin:0 0 1rem;max-width:60ch}
+strong{font-weight:600;color:var(--ink)}
+em{font-style:normal;color:var(--accent-ink);font-weight:500}
+
+ul{margin:0 0 1rem;padding-left:1.1rem;max-width:60ch}
+li{margin-bottom:.4rem}
+li::marker{color:var(--faint)}
+
+/* ---------- tables ---------- */
+
+.scroller{
+  overflow-x:auto;
+  margin:1.2rem 0 1.6rem;
+  border:1px solid var(--line);
+  border-radius:2px;
+  background:var(--surface);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.9rem;
+  min-width:34rem;
+}
+thead th{
+  text-align:left;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-weight:500;
+  font-size:.66rem;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  color:var(--faint);
+  padding:.7rem .9rem;
+  border-bottom:1px solid var(--line-strong);
+  background:var(--surface-2);
+  white-space:nowrap;
+}
+tbody td{
+  padding:.72rem .9rem;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+  line-height:1.55;
+}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82rem;white-space:nowrap;color:var(--muted)}
+tr.hi td{background:var(--accent-soft)}
+tr.hi td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+tr.hi strong{color:var(--accent-ink)}
+
+/* ---------- callouts ---------- */
+
+.note{
+  border-left:3px solid var(--accent);
+  background:var(--surface);
+  padding:1.1rem 1.25rem;
+  margin:1.5rem 0;
+  border-radius:0 2px 2px 0;
+  box-shadow:var(--shadow);
+}
+.note.warn{border-left-color:var(--amber)}
+.note.calm{border-left-color:var(--teal)}
+.note p{margin:0}
+.note p + p{margin-top:.7rem}
+.note .lead{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1.02rem;
+  letter-spacing:-.01em;
+}
+
+.quote{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:clamp(1.15rem,2.6vw,1.5rem);
+  line-height:1.45;
+  letter-spacing:-.02em;
+  color:var(--ink);
+  border-top:1px solid var(--line-strong);
+  border-bottom:1px solid var(--line-strong);
+  padding:1.6rem 0;
+  margin:2.2rem 0;
+  max-width:34ch;
+  text-wrap:balance;
+}
+
+/* ---------- day rail ---------- */
+
+.rail{
+  display:grid;
+  gap:0;
+  margin:1.4rem 0 1.8rem;
+  border-top:1px solid var(--line);
+}
+.day{
+  display:grid;
+  grid-template-columns:5.5rem 1fr auto;
+  gap:1rem;
+  align-items:start;
+  padding:.9rem .25rem;
+  border-bottom:1px solid var(--line);
+}
+.day .d{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.75rem;
+  font-weight:500;
+  color:var(--faint);
+  font-variant-numeric:tabular-nums;
+  padding-top:.15rem;
+}
+.day .d b{
+  display:block;
+  color:var(--accent-ink);
+  font-weight:600;
+  font-size:.78rem;
+}
+.day .b{min-width:0}
+.day .b .t{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:.98rem;
+  letter-spacing:-.01em;
+}
+.day .b .x{
+  font-size:.87rem;
+  color:var(--muted);
+  line-height:1.55;
+}
+.due{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;
+  color:var(--faint);
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  padding-top:.3rem;
+}
+.day.pin{background:var(--surface)}
+.day.pin .b .t{color:var(--accent-ink)}
+
+/* ---------- run sheet ---------- */
+
+.run{
+  display:grid;
+  gap:0;
+  border-top:1px solid var(--line-strong);
+  margin:1.4rem 0 1.8rem;
+}
+.slot{
+  display:grid;
+  grid-template-columns:5.5rem 1fr;
+  gap:1.1rem;
+  padding:1rem .25rem;
+  border-bottom:1px solid var(--line);
+}
+.slot .clock{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.82rem;
+  font-weight:500;
+  font-variant-numeric:tabular-nums;
+  color:var(--ink);
+}
+.slot .clock span{
+  display:block;
+  font-size:.68rem;
+  color:var(--faint);
+  font-weight:400;
+}
+.slot h5{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1rem;
+  letter-spacing:-.01em;
+  margin:0 0 .3rem;
+}
+.slot p{font-size:.9rem;color:var(--muted);margin:0;max-width:56ch}
+.out{
+  display:inline-block;
+  margin-top:.55rem;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.68rem;
+  letter-spacing:.05em;
+  color:var(--teal);
+  background:var(--teal-soft);
+  padding:.22rem .5rem;
+  border-radius:2px;
+}
+.slot.key{background:var(--surface)}
+.slot.key h5{color:var(--accent-ink)}
+
+/* ---------- checklist ---------- */
+
+.check{
+  list-style:none;
+  padding:0;
+  margin:1.1rem 0 1.5rem;
+  border:1px solid var(--line);
+  border-radius:2px;
+  background:var(--surface);
+  max-width:44rem;
+}
+.check li{
+  display:flex;
+  gap:.75rem;
+  align-items:flex-start;
+  padding:.7rem 1rem;
+  border-bottom:1px solid var(--line);
+  margin:0;
+  font-size:.93rem;
+}
+.check li:last-child{border-bottom:0}
+.check li::before{
+  content:"";
+  flex:0 0 auto;
+  width:.95rem;
+  height:.95rem;
+  margin-top:.36rem;
+  border:1.5px solid var(--line-strong);
+  border-radius:2px;
+}
+
+/* ---------- cards ---------- */
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+  gap:1rem;
+  margin:1.3rem 0 1.6rem;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:2px;
+  padding:1.1rem 1.15rem;
+}
+.card .n{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.66rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--faint);
+  display:block;
+  margin-bottom:.45rem;
+}
+.card h5{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1.05rem;
+  letter-spacing:-.015em;
+  margin:0 0 .45rem;
+}
+.card p{font-size:.88rem;color:var(--muted);margin:0;max-width:none}
+
+.no{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+  margin:1.1rem 0 1.5rem;
+  padding:0;
+  list-style:none;
+  max-width:none;
+}
+.no li{
+  margin:0;
+  font-size:.87rem;
+  color:var(--muted);
+  border:1px solid var(--line);
+  border-radius:2px;
+  padding:.4rem .7rem;
+  background:var(--surface);
+  text-decoration:line-through;
+  text-decoration-color:var(--amber);
+  text-decoration-thickness:1.5px;
+}
+
+footer{
+  border-top:3px solid var(--ink);
+  padding-top:1.2rem;
+  font-size:.82rem;
+  color:var(--faint);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem 1.5rem;
+}
+
+@media (max-width:640px){
+  .day{grid-template-columns:4.2rem 1fr;}
+  .day .due{grid-column:2;padding-top:.2rem}
+  .slot{grid-template-columns:4.4rem 1fr;gap:.8rem}
+  .fact{flex:1 1 45%;border-right:0}
+  .quote{max-width:none}
+}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">스폰지클럽 공식 SNS 유닛 · @spongeclub.ai</p>
+  <h1>스폰지타임즈<br>3기 운영안</h1>
+  <p class="sub">인턴 8일을 어떻게 굴릴지, 무엇을 미리 만들어둬야 하는지, 8/26 공유회에서 무엇을 실습할지에 대한 제안.</p>
+</header>
+
+<dl class="factbar">
+  <div class="fact"><dt>모집 마감</dt><dd>8/28 11:00</dd></div>
+  <div class="fact"><dt>공유회</dt><dd>8/26</dd></div>
+  <div class="fact"><dt>인턴 기간</dt><dd>8/29 – 9/5</dd></div>
+  <div class="fact"><dt>발표</dt><dd>9/6 13:00</dd></div>
+  <div class="fact"><dt>인원</dt><dd>12명</dd></div>
+  <div class="fact"><dt>목표</dt><dd>팔로워 1,000</dd></div>
+</dl>
+
+<!-- ============ 1 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">01 / 전제</span>
+    <h2>3기의 KPI를 하나만 고른다면 &lsquo;릴스 평균 도달&rsquo;입니다</h2>
+  </div>
+
+  <p>팔로워 1,000명을 <strong>발행량</strong>으로 풀지 <strong>히트율</strong>로 풀지를 먼저 정해야 나머지가 다 따라옵니다. 역산해봤습니다.</p>
+
+  <p><code style="font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--muted)">건당 신규 팔로워 = 릴스 도달 × 프로필 방문율 × 팔로우 전환율</code></p>
+
+  <div class="scroller">
+    <table>
+      <thead>
+        <tr>
+          <th>시나리오</th>
+          <th class="num">평균 도달</th>
+          <th class="num">프로필 방문</th>
+          <th class="num">팔로우 전환</th>
+          <th class="num">건당 유입</th>
+          <th class="num">주 발행</th>
+          <th class="num">1,000까지</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>A · 현상 유지</td>
+          <td class="num">800</td><td class="num">3%</td><td class="num">20%</td>
+          <td class="num">4.8명</td><td class="num">8건</td><td class="num">약 26주</td>
+        </tr>
+        <tr class="hi">
+          <td><strong>B · 히트율 개선</strong></td>
+          <td class="num">2,500</td><td class="num">4%</td><td class="num">25%</td>
+          <td class="num"><strong>25명</strong></td><td class="num">8건</td><td class="num"><strong>약 5주</strong></td>
+        </tr>
+        <tr>
+          <td>C · 발행량 2배</td>
+          <td class="num">800</td><td class="num">3%</td><td class="num">20%</td>
+          <td class="num">4.8명</td><td class="num">16건</td><td class="num">약 13주</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>B는 C보다 2.6배 빠른데 제작 부하는 절반입니다.</strong> 발행량을 늘리는 건 사람을 갈아 넣는 방향이고, 12명이 붙는 3기에서 발행량은 이미 남습니다. 부족한 건 히트율입니다.</p>
+
+  <div class="note">
+    <p class="lead">단일 KPI: 릴스 평균 도달</p>
+    <p>하위 지표는 저장률·공유율(도달을 만드는 원인)과 프로필 방문 전환율(팔로워로 바꾸는 지점). 팔로워 수는 결과 지표로만 봅니다. 위 숫자는 초기 계정 기준의 가정치이므로, 첫 2주 실측으로 바로 교체해야 합니다.</p>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">02 / 규칙 점검</span>
+    <h2>공고 규칙에서 짚고 갈 두 가지</h2>
+  </div>
+
+  <h3>발행량 산수가 인원과 맞지 않습니다</h3>
+  <p>&ldquo;주 4건 이상 / 1인 1건&rdquo;은 정규 4명 기준의 규칙입니다. 12명이 되면 주 12건이 나옵니다. 팔로워 1,000 미만 계정에 주 12건은 검수 부하와 톤 붕괴를 부르고, 위 시나리오 C가 보여주듯 효율도 나쁩니다.</p>
+
+  <div class="note calm">
+    <p class="lead">제작과 발행을 분리합니다</p>
+    <p>규칙 문구를 <em>1인 주 1건 제작 / 계정은 주 8건 발행</em>으로 다듬고, 만든 건 전부 <strong>발행 큐</strong>에 넣습니다. 편집장이 하루 1~2건씩 스케줄하고, 남은 건은 다음 주 빈 슬롯이나 리믹스 소재로 이월합니다.</p>
+    <p><strong>발행되지 않아도 제작 완료로 인정</strong>한다는 걸 명문화해야 사람이 안 빠집니다. 개인의 리듬(주 1건)과 계정의 리듬(주 8건)이 분리되고, 공고의 &ldquo;주 4건 이상&rdquo;도 그대로 충족합니다.</p>
+  </div>
+
+  <h3>전환 기준을 인턴 시작 전에 공개해야 합니다</h3>
+  <p>인턴 종료가 9/5(토), 발표가 9/6(일) 13:00입니다. 하루 만에 판단하는 구조라 기준이 사후에 나오면 잡음이 생깁니다. 공고가 이미 &ldquo;능력·퀄리티가 아니라 끝까지 함께하는지&rdquo;라고 못 박았으니, 그 문장을 그대로 체크리스트로 바꾸면 됩니다.</p>
+
+  <h4>정규 전환 기준 — 8/28 온보딩 때 공개</h4>
+  <ul class="check">
+    <li>가설 1문장 제출 (D1)</li>
+    <li>콘텐츠 1건 제작 완료 — D5까지 큐 제출이면 인정</li>
+    <li>유닛 회의 1회 참석 (8/31)</li>
+    <li>회고 3줄 제출 (D8)</li>
+    <li>3기 계속 활동 의사</li>
+  </ul>
+
+  <div class="note warn">
+    <p><strong>4개 항목 중 3개 + 계속 의사 → 정규 전환.</strong> 도달·팔로워 등 지표 수치는 기준에서 <strong>제외</strong>합니다. 운이 크게 작용하는 값으로 사람을 거르면 공고에 쓴 말과 어긋납니다.</p>
+  </div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">03 / 인턴 8일</span>
+    <h2>가설 검증 한 바퀴를 8일 안에 닫습니다</h2>
+  </div>
+
+  <p>인턴 기간의 전부는 네 칸입니다. <strong>가설 → 발행 → 48시간 지표 → 회고.</strong> 이 중 &lsquo;지표를 본 경험&rsquo;이 빠지면 그냥 콘텐츠 한 편 만들고 끝난 게 됩니다. 8일이 짧기 때문에 하루 30분 안에 끝나는 단위로 쪼갰습니다.</p>
+
+  <h4>크루 구성</h4>
+  <p>정규 유닛원 1명 + 인턴 2명 = <strong>4크루</strong>, 크루별 채널을 따로 팝니다. 크루장의 역할은 심사가 아니라 <em>발행 버튼을 눌러주는 사람</em>입니다. 인턴이 &ldquo;이거 올려도 되나요?&rdquo;에서 멈추지 않게 하는 게 유일한 임무입니다.</p>
+
+  <div class="rail">
+    <div class="day">
+      <div class="d"><b>D0</b>8/28 금</div>
+      <div class="b"><div class="t">온보딩 30분</div><div class="x">채널 초대 · 크루 배정 · 소재 1개 선점 · 전환 기준 공개 · 준비물 안내</div></div>
+      <div class="due">20:00</div>
+    </div>
+    <div class="day pin">
+      <div class="d"><b>D1</b>8/29 토</div>
+      <div class="b"><div class="t">가설 1문장 제출</div><div class="x">템플릿 한 문장. 이게 D8 회고의 검증 대상이 됩니다</div></div>
+      <div class="due">~22:00</div>
+    </div>
+    <div class="day">
+      <div class="d"><b>D2</b>8/30 일</div>
+      <div class="b"><div class="t">초안 공유</div><div class="x">러프컷 또는 캐러셀 1장. <strong>30% 상태로 올리는 게 규칙</strong> — 완성본을 요구하면 아무도 안 올립니다</div></div>
+      <div class="due">~22:00</div>
+    </div>
+    <div class="day pin">
+      <div class="d"><b>D3</b>8/31 월</div>
+      <div class="b"><div class="t">정규 유닛 회의 첫 참석</div><div class="x">21:00 · 60분 고정 아젠다. 발행 순서 확정</div></div>
+      <div class="due">21:00</div>
+    </div>
+    <div class="day">
+      <div class="d"><b>D4</b>9/1 화</div>
+      <div class="b"><div class="t">발행 시작</div><div class="x">슬롯 20:00 / 21:30</div></div>
+      <div class="due"></div>
+    </div>
+    <div class="day">
+      <div class="d"><b>D5</b>9/2 수</div>
+      <div class="b"><div class="t">큐 제출 최종 마감</div><div class="x">여기까지 제출하면 &lsquo;제작 완료&rsquo;로 인정</div></div>
+      <div class="due">~22:00</div>
+    </div>
+    <div class="day pin">
+      <div class="d"><b>D6</b>9/3 목</div>
+      <div class="b"><div class="t">48시간 지표 공개</div><div class="x">계정 분석 리포트 1회 — 인턴 기간에 반드시 한 번 돌아가야 하는 지점</div></div>
+      <div class="due"></div>
+    </div>
+    <div class="day">
+      <div class="d"><b>D7</b>9/4 금</div>
+      <div class="b"><div class="t">리믹스 데이</div><div class="x">본인 콘텐츠를 다른 포맷으로 1건 더 (릴스 ↔ 캐러셀)</div></div>
+      <div class="due">~22:00</div>
+    </div>
+    <div class="day">
+      <div class="d"><b>D8</b>9/5 토</div>
+      <div class="b"><div class="t">회고 3줄 + 크루 클로징</div><div class="x">가설이 맞았나 / 다음에 바꿀 것 하나 / 계속할 의사</div></div>
+      <div class="due">~22:00</div>
+    </div>
+  </div>
+
+  <h3>가설 문장 템플릿</h3>
+  <div class="quote">[누구]에게 [어떤 훅]으로 [어떤 포맷]을 보여주면 [어떤 반응]이 올 것이다.</div>
+  <p style="color:var(--muted);font-size:.9rem">예 — <em>AI 툴을 막 써보기 시작한 사람에게 &ldquo;이거 30분 만에 만들었어요&rdquo;라는 훅으로 비포/애프터 릴스를 보여주면 저장이 평균보다 높을 것이다.</em></p>
+
+  <h3>D7 리믹스 데이를 넣은 이유</h3>
+  <p>지원서 두 분이 각각 &ldquo;하나의 소재를 여러 포맷으로 확장&rdquo;, &ldquo;릴스 소재를 정보형 캐러셀로 재정리해 저장·공유로 잇기&rdquo;를 하고 싶다고 썼습니다. 정확히 같은 것을 원하고 있고, 제작비가 거의 0인데 발행 큐를 두 배로 채웁니다. 선택이 아니라 필수 과제로 넣는 게 맞습니다.</p>
+
+  <h3>이탈 방지</h3>
+  <ul>
+    <li><strong>데일리 스탬프</strong> — 하루 한 줄. &ldquo;못 했음&rdquo;도 유효한 스탬프라고 명시합니다.</li>
+    <li>48시간 무응답이면 크루장이 DM 1회. <strong>그 이상은 추적하지 않습니다.</strong> 부담을 주는 순간 공고의 톤과 어긋납니다.</li>
+  </ul>
+</section>
+
+<!-- ============ 4 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">04 / 주간 운영</span>
+    <h2>월 21시 회의 60분과 포맷 4종</h2>
+  </div>
+
+  <div class="scroller">
+    <table>
+      <thead><tr><th class="num">시간</th><th>블록</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">00–08</td><td>지표 3개</td><td>팔로워 순증 · 릴스 평균 도달 · 저장+공유 상위 3건</td></tr>
+        <tr><td class="mono">08–25</td><td>톱1 / 워스트1 해부</td><td>첫 3초 · 자막 · 훅. 결론은 반드시 &ldquo;다음 주에 복제할 요소 1개&rdquo;</td></tr>
+        <tr><td class="mono">25–45</td><td>가설 + 소재 배정</td><td>소재 뱅크에서 pull</td></tr>
+        <tr><td class="mono">45–55</td><td>막힌 것</td><td>1인 1분. 도움 요청 전용</td></tr>
+        <tr><td class="mono">55–60</td><td>캘린더 확정</td><td>다음 주 발행 슬롯 배정</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.9rem;color:var(--muted)">회의록은 템플릿으로 자동 생성하고, 결석자는 회의록과 본인 배정만 확인하면 되게 합니다. 회의 참석이 병목이 되면 안 됩니다.</p>
+
+  <h3>포맷 4종</h3>
+  <p>지원자 두 분 모두 &ldquo;멋진 한 컷&rdquo;이 아니라 <strong>반복 가능한 포맷</strong>을 원했습니다. 매번 새로 기획하지 않도록 고정 요소와 변수 요소를 분리합니다.</p>
+
+  <div class="scroller">
+    <table>
+      <thead><tr><th>포맷</th><th>형태</th><th>고정 요소</th><th>변수</th><th>노리는 지표</th></tr></thead>
+      <tbody>
+        <tr><td><strong>이걸 AI로?</strong></td><td class="mono">릴스 20–30초</td><td>결과물을 첫 3초에 선공개 → 제작자 태그 → 과정 3컷 → 툴 자막</td><td>소재·툴</td><td>도달</td></tr>
+        <tr><td><strong>스폰지 인터뷰</strong></td><td class="mono">릴스 30–45초</td><td>질문 3개 세트, 자막 스타일</td><td>사람</td><td>도달 · 댓글</td></tr>
+        <tr><td><strong>타임즈 위클리</strong></td><td class="mono">캐러셀 6–8장</td><td>1장 표지 포맷, 마지막 장 CTA</td><td>이번 주 소식</td><td>저장</td></tr>
+        <tr><td><strong>툴 한 장</strong></td><td class="mono">캐러셀 5장</td><td>툴 1개 + 실사용 결과 1개 + 프롬프트 공개</td><td>툴</td><td>저장 · 공유</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>릴스 : 캐러셀 = 3 : 1.</strong> 도달은 릴스가, 저장은 캐러셀이 만듭니다. 저장·공유가 다시 도달을 밀어올리기 때문에 캐러셀을 빼면 안 됩니다.</p>
+
+  <h3>역할 (12명 기준, 2주 로테이션)</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>역할</th><th class="num">인원</th><th>하는 일</th></tr></thead>
+      <tbody>
+        <tr><td>편집장</td><td class="num">1</td><td>발행 캘린더 · 최종 검수 · 큐 관리</td></tr>
+        <tr><td>포맷 오너</td><td class="num">4</td><td>포맷별 템플릿과 품질 기준 유지</td></tr>
+        <tr><td>데이터</td><td class="num">1</td><td>주간 리포트 · 지표 대시보드</td></tr>
+        <tr><td>커뮤니티</td><td class="num">1</td><td>댓글 · DM · 해시태그 · 리포스트 요청</td></tr>
+        <tr><td>아카이브</td><td class="num">1</td><td>발행물 + 지표 + 회고 축적</td></tr>
+        <tr><td>제작 전담</td><td class="num">4</td><td>콘텐츠 제작, 로테이션으로 역할 경험</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.9rem;color:var(--muted)">역할을 안 쪼개면 12명 중 3~4명만 일하는 구조가 됩니다.</p>
+</section>
+
+<!-- ============ 5 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">05 / 프로덕트</span>
+    <h2>무엇을 만들어두고 시작할 것인가</h2>
+  </div>
+
+  <h4>P0 — 8/29 전에 있어야 하는 것</h4>
+  <div class="cards">
+    <div class="card">
+      <span class="n">P0 · 01</span>
+      <h5>소재 뱅크 &amp; 발행 캘린더</h5>
+      <p>노션 DB 하나. 소재 / 포맷 / 가설 / 담당 / 상태 / 발행일 / 도달 / 저장 / 공유 / 프로필 방문 / 팔로우 전환 / 회고 한 줄. <strong>가설과 지표가 같은 행에 있어야</strong> 회고가 됩니다. 스프레드시트를 따로 두면 아무도 안 씁니다.</p>
+    </div>
+    <div class="card">
+      <span class="n">P0 · 02</span>
+      <h5>콘텐츠 브리프 스킬</h5>
+      <p>소재 한 줄 → 훅 3안 / 씬 구성 / 자막 / 캡션 / 해시태그 / 태그 규칙 체크. 계정 톤과 포맷 4종 규격을 스킬 안에 고정. 12명 규모에서 임팩트가 가장 큰 하나입니다.</p>
+    </div>
+    <div class="card">
+      <span class="n">P0 · 03</span>
+      <h5>계정 분석 스킬</h5>
+      <p>공고에 이미 지원 항목으로 약속되어 있고, 모집 대상에도 적혀 있습니다. 인사이트 내보내기 → 주간 리포트 + 상위 3건의 공통점 + <strong>다음 주 가설 3개</strong>. D6에 실제로 한 번 돌려야 합니다.</p>
+    </div>
+  </div>
+
+  <h4>P1 — 인턴 기간의 부산물을 그대로 프로덕트로</h4>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>프로덕트</th><th>언제</th><th>씨앗</th></tr></thead>
+      <tbody>
+        <tr><td><strong>포맷 템플릿 팩</strong> — 캔바 4종 + 자막 스타일 + 썸네일 규격 + 안전 영역</td><td class="mono">D2–D5</td><td>포맷 오너 4명</td></tr>
+        <tr><td><strong>리믹스 스킬</strong> — 릴스 대본 ↔ 캐러셀 카피 ↔ 캡션 ↔ 스레드</td><td class="mono">D7</td><td>리믹스 데이</td></tr>
+        <tr><td><strong>훅 라이브러리</strong> — 실제 성과와 연결된 훅 문장 DB</td><td class="mono">상시</td><td>공유회 훅 배틀</td></tr>
+        <tr><td><strong>레퍼런스 해부 카드</strong> — 벤치마크 계정을 고정/변수로 분해</td><td class="mono">공유회</td><td>지원서에 나온 계정들</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>P2 — 3기 후반</h4>
+  <ul>
+    <li>댓글·DM 응대 톤 가이드 + 당번표</li>
+    <li>월간 리캡 자동 생성</li>
+    <li><strong>기수 아카이브</strong> — 발행물 전량 + 지표 + 회고. 4기의 출발 자산이 됩니다.</li>
+  </ul>
+
+  <h3>사람이 익혀야 할 스킬</h3>
+  <ul>
+    <li><strong>첫 3초 훅 설계</strong> — 단일 KPI가 도달이므로 여기에 가장 큰 비중</li>
+    <li><strong>자막 리듬</strong> — 1줄 12자 내외, 0.8~1.2초 노출</li>
+    <li><strong>유닛 표준 툴 세트 확정</strong> — 영상 1개 + 이미지 1개 + 편집 1개로 못 박기. 도구를 계속 바꾸는 게 초보 유닛의 최대 시간 낭비입니다. 새 툴은 「툴 한 장」 콘텐츠 소재로만 다룹니다.</li>
+    <li><strong>인스타그램 인사이트 독해</strong> — 도달과 조회의 차이, 저장·공유가 도달을 만드는 경로, 프로필 방문 전환율</li>
+    <li><strong>가설 쓰기</strong>, <strong>캔바 템플릿 편집</strong> — 누구나 30분 안에 가능한 수준까지</li>
+  </ul>
+</section>
+
+<!-- ============ 6 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">06 / 8·26 공유회</span>
+    <h2>설명회가 아니라 완주 경험 1회를 만드는 자리</h2>
+  </div>
+
+  <p>공유회가 모집 마감(8/28 11:00)보다 <strong>앞에</strong> 있습니다. 그래서 이 자리는 세 가지를 동시에 해야 합니다 — 지원 전환, 기대치 정렬(주 1건 제작 / 월 21시 회의 / 본인 계정 태그), 그리고 공고에 적은 &ldquo;혼자 하기 엄두가 안 나던 분&rdquo;에게 필요한 <em>&ldquo;나도 되네&rdquo; 경험 1회</em>.</p>
+
+  <div class="note">
+    <p class="lead">툴 튜토리얼 강의를 하지 않습니다</p>
+    <p>참가자가 90분 안에 본인 손으로 1건을 끝까지 냅니다. 진행 순서를 인턴 8일의 순서(소재 → 훅 → 제작 → 가설 → 발행 → 지표)와 <strong>똑같이</strong> 맞췄기 때문에, 8일 동안 뭘 하게 될지 말로 설명할 필요가 없어집니다.</p>
+  </div>
+
+  <h3>90분 런시트</h3>
+  <div class="run">
+    <div class="slot">
+      <div class="clock">00–10<span>10분</span></div>
+      <div>
+        <h5>유닛 소개</h5>
+        <p>3기 목표(팔로워 1,000) + 규칙 3줄. <strong>여기서 시간 쓰지 않습니다.</strong></p>
+      </div>
+    </div>
+    <div class="slot key">
+      <div class="clock">10–20<span>10분</span></div>
+      <div>
+        <h5>실습 1 · 소재 붙이기</h5>
+        <p>&ldquo;최근 스폰지클럽에서 보거나 한 것&rdquo;을 한 줄씩 공용 보드에. 20명이면 소재 20개가 그 자리에서 생깁니다.</p>
+        <span class="out">→ 3기 소재 뱅크 시드</span>
+      </div>
+    </div>
+    <div class="slot key">
+      <div class="clock">20–33<span>13분</span></div>
+      <div>
+        <h5>실습 2 · 훅 배틀</h5>
+        <p>자기 소재로 훅 3개를 뽑고 1개 선택 → 옆 사람이 &ldquo;3초 안에 손이 멈출까&rdquo;를 1~5점으로 → 상위 3개 낭독.</p>
+        <span class="out">→ 훅 라이브러리 시드</span>
+      </div>
+    </div>
+    <div class="slot key">
+      <div class="clock">33–58<span>25분</span></div>
+      <div>
+        <h5>실습 3 · 15초 만들기</h5>
+        <p>「이걸 AI로?」 포맷 카드 1장을 배포하고 제작. <strong>미완성 제출을 명시적으로 허용</strong>합니다. 진행자 1명이 순회.</p>
+        <span class="out">→ 러프 콘텐츠 1인 1건</span>
+      </div>
+    </div>
+    <div class="slot key">
+      <div class="clock">58–70<span>12분</span></div>
+      <div>
+        <h5>실습 4 · 상호 리뷰 + 가설</h5>
+        <p>3인 1조로 1분 시청 + 30초 피드백. 이어서 가설 1문장 작성 — D1에 쓸 바로 그 템플릿입니다.</p>
+        <span class="out">→ 가설 문장</span>
+      </div>
+    </div>
+    <div class="slot key">
+      <div class="clock">70–82<span>12분</span></div>
+      <div>
+        <h5>실습 5 · 실제 발행</h5>
+        <p>본인 인스타에 업로드 + 계정 태그. 태그 규칙을 몸으로 겪게 합니다. 발행이 부담이면 큐 제출로 대체.</p>
+        <span class="out">→ 발행 1건</span>
+      </div>
+    </div>
+    <div class="slot">
+      <div class="clock">82–90<span>8분</span></div>
+      <div>
+        <h5>마무리</h5>
+        <p>인턴 8일 일정 + 전환 기준 공개 + <strong>&ldquo;48시간 뒤에 지표 같이 봅니다&rdquo;</strong> 약속.</p>
+        <span class="out">→ 재접촉 약속</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="note calm">
+    <p><strong>마지막 8분이 이 설계의 핵심입니다.</strong> 오늘 발행한 것의 48시간 지표를 보는 날이 정확히 8/28, 모집 마감일입니다. 참가자가 지표를 보러 다시 들어오는 날과 지원 마감일이 겹칩니다.</p>
+  </div>
+
+  <h3>60분 축소안 — 온라인이거나 시간이 부족할 때</h3>
+  <ul>
+    <li>실습 3을 &ldquo;1분 러프 스토리보드 3컷&rdquo;으로 축소 (25분 → 12분)</li>
+    <li>실습 5 발행은 생략하고 큐 제출로 대체</li>
+    <li>실습 1·2·4는 그대로 — 여기가 실제로 소재 뱅크와 훅 라이브러리를 만드는 구간입니다</li>
+  </ul>
+
+  <h3>대안 실습 — 제작 부담이 큰 그룹이라면 (40분)</h3>
+  <p><strong>「레퍼런스 해부」.</strong> 지원서에 나온 계정을 그대로 씁니다. @iam.sibong · @moment.ryan · @to_be_100m + 1개를 조별 배정 → 5분 시청 → 3칸 카드 작성 → 조별 발표.</p>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>고정 요소</th><th>변수 요소</th><th>첫 3초 훅</th></tr></thead>
+      <tbody><tr><td>매 편 똑같은 것</td><td>편마다 바뀌는 것</td><td>손을 멈추게 한 장치</td></tr></tbody>
+    </table>
+  </div>
+  <p>카드를 모으면 <strong>그대로 3기 포맷 팩의 초안</strong>이 됩니다. 제작 부담이 0이고 온라인에 적합합니다.</p>
+
+  <h3>하지 말 것</h3>
+  <ul class="no">
+    <li>툴 튜토리얼 강의</li>
+    <li>돌아가며 자기소개 3분씩</li>
+    <li>완성도 요구 / 결과물 평가</li>
+    <li>슬라이드 30장</li>
+  </ul>
+
+  <h3>준비물</h3>
+  <ul class="check">
+    <li>공용 보드 1페이지 (피그잼 또는 노션)</li>
+    <li>훅 프롬프트 카드</li>
+    <li>「이걸 AI로?」 포맷 카드 + 캔바 템플릿 1종</li>
+    <li>계정 로그인</li>
+    <li>소재 뱅크 DB — 실습 1 결과를 바로 받을 상태로</li>
+    <li>발행 체크리스트 (태그 / 캡션 / 해시태그)</li>
+    <li>진행자 2명 — 1명 진행, 1명 순회 · 타이머</li>
+  </ul>
+
+  <h3>진행자가 반복할 한 문장</h3>
+  <div class="quote">오늘 잘 만들 필요 없습니다. 오늘의 목표는 끝까지 한 번 가보는 겁니다.</div>
+  <p>공고에 쓴 인턴 기간의 정의와 같은 문장입니다. 공유회에서 이 문장을 듣고 지원한 사람은 인턴 기간에도 같은 기준으로 움직입니다.</p>
+</section>
+
+<!-- ============ 7 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">07 / 확인 요청</span>
+    <h2>이 계획이 기대는 세 가지 가정</h2>
+  </div>
+  <ul>
+    <li><strong>&ldquo;총 12명(정규 유닛원 4명)&rdquo;의 해석</strong> — 기존 정규 4명 + 신규 인턴 8명인지, 인턴 12명 중 4명이 정규 전환인지. 위 계획은 전자를 기본으로 썼지만 후자여도 크루 인원만 바꾸면 그대로 돌아갑니다.</li>
+    <li><strong>8/26 공유회의 형식과 길이</strong> — 온/오프라인, 90분 확보 가능 여부. 60분 축소안과 40분 대안 실습을 함께 준비했습니다.</li>
+    <li><strong>현재 팔로워 수</strong> — 01의 역산에서 시작점입니다. 실측이 들어오면 시나리오 표를 바로 갱신해야 합니다.</li>
+  </ul>
+</section>
+
+<footer>
+  <span>스폰지타임즈 3기 운영안</span>
+  <span>2026.08.24 작성</span>
+  <span>instagram.com/spongeclub.ai</span>
+</footer>
+
+</div>
