@@ -1,0 +1,712 @@
+<title>이기적 공유회 진행안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#EDEFEA;
+  --surface:#FFFFFF;
+  --surface-2:#F4F6F1;
+  --ink:#141C17;
+  --muted:#59685F;
+  --faint:#87948B;
+  --line:#D3D9D1;
+  --line-strong:#B6BFB6;
+  --accent:#A31E60;
+  --accent-ink:#A31E60;
+  --accent-soft:#F8E5EE;
+  --teal:#0E6459;
+  --teal-soft:#DDEDE8;
+  --amber:#8A5210;
+  --amber-soft:#F6E9D5;
+  --shadow:0 1px 2px rgba(20,28,23,.05), 0 8px 24px -16px rgba(20,28,23,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101512;
+    --surface:#171E19;
+    --surface-2:#1D2620;
+    --ink:#E6ECE5;
+    --muted:#97A69B;
+    --faint:#738178;
+    --line:#2A352D;
+    --line-strong:#3C4A40;
+    --accent:#F186B4;
+    --accent-ink:#F9A9CB;
+    --accent-soft:#38182A;
+    --teal:#59C8B4;
+    --teal-soft:#11322C;
+    --amber:#DFA75E;
+    --amber-soft:#33240F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101512;
+  --surface:#171E19;
+  --surface-2:#1D2620;
+  --ink:#E6ECE5;
+  --muted:#97A69B;
+  --faint:#738178;
+  --line:#2A352D;
+  --line-strong:#3C4A40;
+  --accent:#F186B4;
+  --accent-ink:#F9A9CB;
+  --accent-soft:#38182A;
+  --teal:#59C8B4;
+  --teal-soft:#11322C;
+  --amber:#DFA75E;
+  --amber-soft:#33240F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+  word-break:keep-all;
+}
+
+.wrap{
+  max-width:60rem;
+  margin:0 auto;
+  padding:0 1.5rem 6rem;
+}
+
+.prose{max-width:60ch}
+
+/* ---------- masthead ---------- */
+
+.masthead{
+  border-bottom:3px solid var(--ink);
+  padding:3.5rem 0 1.25rem;
+  margin-bottom:1rem;
+}
+.kicker{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--accent-ink);
+  margin:0 0 1.1rem;
+}
+.masthead h1{
+  font-family:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  font-weight:900;
+  font-size:clamp(2.4rem,7vw,4rem);
+  line-height:1.04;
+  letter-spacing:-.03em;
+  margin:0;
+  text-wrap:balance;
+}
+.masthead .sub{
+  margin:1.1rem 0 0;
+  font-size:1.05rem;
+  color:var(--muted);
+  max-width:52ch;
+}
+
+.factbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0;
+  border-bottom:1px solid var(--line);
+  margin-bottom:4rem;
+}
+.fact{
+  flex:1 1 8.5rem;
+  padding:.9rem 1rem .9rem 0;
+  border-right:1px solid var(--line);
+}
+.fact:last-child{border-right:0}
+.fact dt{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.66rem;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--faint);
+  margin:0 0 .2rem;
+}
+.fact dd{
+  margin:0;
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1rem;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------- sections ---------- */
+
+section{margin-bottom:4.5rem}
+
+.sec-head{
+  display:flex;
+  align-items:baseline;
+  gap:.85rem;
+  border-top:1px solid var(--line-strong);
+  padding-top:.9rem;
+  margin-bottom:1.6rem;
+}
+.sec-head .tag{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.68rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--faint);
+  white-space:nowrap;
+  padding-top:.35rem;
+}
+.sec-head h2{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:900;
+  font-size:clamp(1.5rem,3.4vw,2rem);
+  letter-spacing:-.025em;
+  line-height:1.2;
+  margin:0;
+  text-wrap:balance;
+}
+
+h3{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1.15rem;
+  letter-spacing:-.01em;
+  margin:2.4rem 0 .7rem;
+}
+h4{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-weight:600;
+  font-size:.72rem;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--faint);
+  margin:2rem 0 .6rem;
+}
+p{margin:0 0 1rem;max-width:60ch}
+strong{font-weight:600;color:var(--ink)}
+em{font-style:normal;color:var(--accent-ink);font-weight:500}
+
+ul{margin:0 0 1rem;padding-left:1.1rem;max-width:60ch}
+li{margin-bottom:.4rem}
+li::marker{color:var(--faint)}
+
+/* ---------- tables ---------- */
+
+.scroller{
+  overflow-x:auto;
+  margin:1.2rem 0 1.6rem;
+  border:1px solid var(--line);
+  border-radius:2px;
+  background:var(--surface);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.9rem;
+  min-width:34rem;
+}
+thead th{
+  text-align:left;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-weight:500;
+  font-size:.66rem;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  color:var(--faint);
+  padding:.7rem .9rem;
+  border-bottom:1px solid var(--line-strong);
+  background:var(--surface-2);
+  white-space:nowrap;
+}
+tbody td{
+  padding:.72rem .9rem;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+  line-height:1.55;
+}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82rem;white-space:nowrap;color:var(--muted)}
+tr.hi td{background:var(--accent-soft)}
+tr.hi td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+tr.hi strong{color:var(--accent-ink)}
+
+/* ---------- callouts ---------- */
+
+.note{
+  border-left:3px solid var(--accent);
+  background:var(--surface);
+  padding:1.1rem 1.25rem;
+  margin:1.5rem 0;
+  border-radius:0 2px 2px 0;
+  box-shadow:var(--shadow);
+}
+.note.warn{border-left-color:var(--amber)}
+.note.calm{border-left-color:var(--teal)}
+.note p{margin:0}
+.note p + p{margin-top:.7rem}
+.note .lead{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1.02rem;
+  letter-spacing:-.01em;
+}
+
+.quote{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:clamp(1.15rem,2.6vw,1.5rem);
+  line-height:1.45;
+  letter-spacing:-.02em;
+  color:var(--ink);
+  border-top:1px solid var(--line-strong);
+  border-bottom:1px solid var(--line-strong);
+  padding:1.6rem 0;
+  margin:2.2rem 0;
+  max-width:34ch;
+  text-wrap:balance;
+}
+
+/* ---------- day rail ---------- */
+
+.rail{
+  display:grid;
+  gap:0;
+  margin:1.4rem 0 1.8rem;
+  border-top:1px solid var(--line);
+}
+.day{
+  display:grid;
+  grid-template-columns:5.5rem 1fr auto;
+  gap:1rem;
+  align-items:start;
+  padding:.9rem .25rem;
+  border-bottom:1px solid var(--line);
+}
+.day .d{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.75rem;
+  font-weight:500;
+  color:var(--faint);
+  font-variant-numeric:tabular-nums;
+  padding-top:.15rem;
+}
+.day .d b{
+  display:block;
+  color:var(--accent-ink);
+  font-weight:600;
+  font-size:.78rem;
+}
+.day .b{min-width:0}
+.day .b .t{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:.98rem;
+  letter-spacing:-.01em;
+}
+.day .b .x{
+  font-size:.87rem;
+  color:var(--muted);
+  line-height:1.55;
+}
+.due{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;
+  color:var(--faint);
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  padding-top:.3rem;
+}
+.day.pin{background:var(--surface)}
+.day.pin .b .t{color:var(--accent-ink)}
+
+/* ---------- run sheet ---------- */
+
+.run{
+  display:grid;
+  gap:0;
+  border-top:1px solid var(--line-strong);
+  margin:1.4rem 0 1.8rem;
+}
+.slot{
+  display:grid;
+  grid-template-columns:5.5rem 1fr;
+  gap:1.1rem;
+  padding:1rem .25rem;
+  border-bottom:1px solid var(--line);
+}
+.slot .clock{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.82rem;
+  font-weight:500;
+  font-variant-numeric:tabular-nums;
+  color:var(--ink);
+}
+.slot .clock span{
+  display:block;
+  font-size:.68rem;
+  color:var(--faint);
+  font-weight:400;
+}
+.slot h5{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1rem;
+  letter-spacing:-.01em;
+  margin:0 0 .3rem;
+}
+.slot p{font-size:.9rem;color:var(--muted);margin:0;max-width:56ch}
+.out{
+  display:inline-block;
+  margin-top:.55rem;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.68rem;
+  letter-spacing:.05em;
+  color:var(--teal);
+  background:var(--teal-soft);
+  padding:.22rem .5rem;
+  border-radius:2px;
+}
+.slot.key{background:var(--surface)}
+.slot.key h5{color:var(--accent-ink)}
+
+/* ---------- checklist ---------- */
+
+.check{
+  list-style:none;
+  padding:0;
+  margin:1.1rem 0 1.5rem;
+  border:1px solid var(--line);
+  border-radius:2px;
+  background:var(--surface);
+  max-width:44rem;
+}
+.check li{
+  display:flex;
+  gap:.75rem;
+  align-items:flex-start;
+  padding:.7rem 1rem;
+  border-bottom:1px solid var(--line);
+  margin:0;
+  font-size:.93rem;
+}
+.check li:last-child{border-bottom:0}
+.check li::before{
+  content:"";
+  flex:0 0 auto;
+  width:.95rem;
+  height:.95rem;
+  margin-top:.36rem;
+  border:1.5px solid var(--line-strong);
+  border-radius:2px;
+}
+
+/* ---------- cards ---------- */
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+  gap:1rem;
+  margin:1.3rem 0 1.6rem;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:2px;
+  padding:1.1rem 1.15rem;
+}
+.card .n{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.66rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--faint);
+  display:block;
+  margin-bottom:.45rem;
+}
+.card h5{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1.05rem;
+  letter-spacing:-.015em;
+  margin:0 0 .45rem;
+}
+.card p{font-size:.88rem;color:var(--muted);margin:0;max-width:none}
+
+.no{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+  margin:1.1rem 0 1.5rem;
+  padding:0;
+  list-style:none;
+  max-width:none;
+}
+.no li{
+  margin:0;
+  font-size:.87rem;
+  color:var(--muted);
+  border:1px solid var(--line);
+  border-radius:2px;
+  padding:.4rem .7rem;
+  background:var(--surface);
+  text-decoration:line-through;
+  text-decoration-color:var(--amber);
+  text-decoration-thickness:1.5px;
+}
+
+footer{
+  border-top:3px solid var(--ink);
+  padding-top:1.2rem;
+  font-size:.82rem;
+  color:var(--faint);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem 1.5rem;
+}
+
+@media (max-width:640px){
+  .day{grid-template-columns:4.2rem 1fr;}
+  .day .due{grid-column:2;padding-top:.2rem}
+  .slot{grid-template-columns:4.4rem 1fr;gap:.8rem}
+  .fact{flex:1 1 45%;border-right:0}
+  .quote{max-width:none}
+}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">스폰지타임즈 3기 · 8/26(수) 회차</p>
+  <h1>이기적 공유회<br>진행안</h1>
+  <p class="sub">유닛 소개와 3기 운영 방식을 안내하는 회차. 설명 대신 90분 안에 한 건을 끝까지 만들어보게 합니다.</p>
+</header>
+
+<dl class="factbar">
+  <div class="fact"><dt>일시</dt><dd>8/26 (수)</dd></div>
+  <div class="fact"><dt>길이</dt><dd>90분</dd></div>
+  <div class="fact"><dt>모집 마감</dt><dd>8/28 11:00</dd></div>
+  <div class="fact"><dt>인턴 발표</dt><dd>8/29 (토)</dd></div>
+</dl>
+
+<!-- ============ 1 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">01 / 좌표</span>
+    <h2>모집 마감보다 앞에 있는 자리입니다</h2>
+  </div>
+
+  <p>이 회차가 끝나고 <strong>이틀 뒤가 모집 마감</strong>입니다. 그래서 이 자리는 설명회가 아니라 전환 장치입니다.</p>
+
+  <div class="cards">
+    <div class="card">
+      <span class="n">목적 01</span>
+      <h5>지원 전환</h5>
+      <p>8/28(금) 11:00 마감. 오늘 만들어본 사람이 지원합니다.</p>
+    </div>
+    <div class="card">
+      <span class="n">목적 02</span>
+      <h5>기대치 정렬</h5>
+      <p>월·수·토·일 주간 루프, 인턴 12명 → 정규 4명 구조, 1인 1건 발행. 알고 지원해야 8일을 끝까지 갑니다.</p>
+    </div>
+    <div class="card">
+      <span class="n">목적 03</span>
+      <h5>&ldquo;나도 되네&rdquo; 경험 1회</h5>
+      <p>공고에 적은 <em>&ldquo;혼자 하기 엄두가 나지 않았던 분&rdquo;</em> 에게 필요한 건 설명이 아니라 완주 경험입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">02 / 설계 원칙</span>
+    <h2>인턴 1차 과제의 예행연습으로 짭니다</h2>
+  </div>
+
+  <p>인턴 첫 과제가 <strong>&ldquo;관심 있는 계정 설명 + 그 계정에서 가장 마음에 들었던 콘텐츠 3개 찾아오기&rdquo;</strong> 입니다.</p>
+
+  <div class="note">
+    <p>그러니 이 회차의 실습을 그 워밍업으로 맞춥니다. 참가자는 8/29에 받을 과제를 <strong>이미 한 번 해본 상태</strong>가 되고, 진행자는 8일 동안 뭘 하게 되는지를 말로 설명할 필요가 없어집니다.</p>
+    <p><strong>툴 튜토리얼 강의를 하지 않습니다.</strong> 인턴 첫 주는 AI 없이 직접 만들기로 했으니 더욱 불필요합니다.</p>
+  </div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">03 / 런시트</span>
+    <h2>90분</h2>
+  </div>
+
+  <div class="run">
+    <div class="slot">
+      <div class="clock">00–10<span>10분</span></div>
+      <div>
+        <h5>유닛 소개</h5>
+        <p>3기 목표(팔로워 1,000) · <strong>월·수·토·일 주간 루프</strong> · 인턴 12명 / 정규 4석 구조 투명 공개 · 1인 1건 발행.</p>
+      </div>
+    </div>
+    <div class="slot key">
+      <div class="clock">10–30<span>20분</span></div>
+      <div>
+        <h5>실습 1 · 레퍼런스 해부</h5>
+        <p>본인이 좋아하는 계정에서 콘텐츠 1개를 골라 <strong>고정 / 변수 / 첫 3초 훅</strong> 3칸으로 뜯기 → 3인 1조 공유.</p>
+        <span class="out">→ 1차 과제 예행연습</span>
+      </div>
+    </div>
+    <div class="slot key">
+      <div class="clock">30–45<span>15분</span></div>
+      <div>
+        <h5>실습 2 · 가설 쓰기</h5>
+        <p>해부한 것을 재료로 가설 문장 1개. 템플릿과 예시를 먼저 보여주고 작성합니다.</p>
+        <span class="out">→ 가설 문장</span>
+      </div>
+    </div>
+    <div class="slot key">
+      <div class="clock">45–70<span>25분</span></div>
+      <div>
+        <h5>실습 3 · 같은 소재, 두 포맷</h5>
+        <p>자기 가설로 <strong>릴스 훅 15초 + 캐러셀 표지 1장</strong>을 둘 다. <strong>미완성 제출을 명시적으로 허용</strong>합니다.</p>
+        <span class="out">→ 러프 2종</span>
+      </div>
+    </div>
+    <div class="slot key">
+      <div class="clock">70–82<span>12분</span></div>
+      <div>
+        <h5>실습 4 · 상호 피드백</h5>
+        <p>3인 1조, 1분 시청 + 30초 피드백. 인턴 기간 수요일 슬랙 피드백의 예행연습입니다.</p>
+      </div>
+    </div>
+    <div class="slot">
+      <div class="clock">82–90<span>8분</span></div>
+      <div>
+        <h5>마무리</h5>
+        <p>인턴 8일 일정 · 필수 3가지 · 선발 기준 공개.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>각 블록을 이렇게 둔 이유</h3>
+
+  <h4>실습 1 — 인턴 1차 과제와 완전히 같은 양식</h4>
+  <p>콘텐츠를 그냥 가져오면 대부분 &ldquo;이거 재밌었어요&rdquo;에서 멈춥니다. 3칸으로 뜯으면 그 자리에서 포맷 감각이 생깁니다.</p>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>고정 요소</th><th>변수 요소</th><th>첫 3초 훅</th></tr></thead>
+      <tbody><tr><td>매 편 똑같은 것</td><td>편마다 바뀌는 것</td><td>손을 멈추게 한 장치</td></tr></tbody>
+    </table>
+  </div>
+  <p>여기에 한 줄을 더 붙입니다 — <em>&ldquo;이걸 스폰지타임즈에 적용한다면?&rdquo;</em> 이 질문이 8/31 월요일 회의 아젠다와 그대로 이어집니다.</p>
+
+  <h4>실습 3 — 두 포맷을 다 건드리는 이유</h4>
+  <p>3기는 캐러셀과 릴스를 병행하고, 8/31 회의에서 본인이 어느 쪽을 맡을지 정해야 합니다. 여기서 둘 다 한 번 만들어보면 그 선택이 쉬워집니다.</p>
+
+  <h4>실습 4 — 수요일의 예행연습</h4>
+  <p>인턴 기간의 수요일 슬랙 상호 피드백이 이 형태입니다. 미리 겪어보면 실제 수요일에 침묵하지 않습니다.</p>
+</section>
+
+<!-- ============ 4 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">04 / 가설</span>
+    <h2>실습 2에서 쓸 템플릿</h2>
+  </div>
+
+  <div class="quote">누구에게 어떤 훅으로 어떤 포맷을 보여주면 어떤 반응이 올 것이다.</div>
+
+  <p style="color:var(--muted);font-size:.92rem"><em>&ldquo;AI 툴을 막 써보기 시작한 사람에게 &lsquo;이거 30분 만에 만들었어요&rsquo;라는 훅으로 비포 애프터 릴스를 보여주면 저장이 평균보다 높을 것이다.&rdquo;</em></p>
+
+  <div class="note calm">
+    <p><strong>&ldquo;어떤 반응&rdquo;에 반드시 측정 가능한 지표가 들어가야 합니다</strong> — 저장, 공유, 조회수, 프로필 방문. &ldquo;반응이 좋을 것이다&rdquo;로 쓰면 나중에 맞았는지 틀렸는지 판단할 수가 없습니다. 실습 2에서 이 부분만 한 번 짚어주면 됩니다.</p>
+  </div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">05 / 변형안</span>
+    <h2>60분으로 줄여야 한다면</h2>
+  </div>
+  <ul>
+    <li>실습 3을 <strong>&ldquo;릴스 훅 3컷 스토리보드 + 캐러셀 표지 문구&rdquo;</strong> 로 축소 (25분 → 12분). <strong>두 포맷을 다 건드리는 것만은 유지합니다.</strong></li>
+    <li>실습 4를 5분으로</li>
+    <li>실습 1·2는 그대로 — 여기가 1차 과제의 예행연습이라 가장 중요합니다</li>
+  </ul>
+</section>
+
+<!-- ============ 6 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">06 / 준비</span>
+    <h2>하지 말 것과 챙길 것</h2>
+  </div>
+
+  <h4>하지 말 것</h4>
+  <ul class="no">
+    <li>툴 튜토리얼 강의</li>
+    <li>돌아가며 자기소개 3분씩</li>
+    <li>완성도 요구 / 결과물 평가</li>
+    <li>슬라이드 30장</li>
+    <li>12 → 4 선발 구조 얼버무리기</li>
+  </ul>
+  <p style="font-size:.9rem;color:var(--muted)">특히 마지막 항목 — 여기서 숨기면 9/6에 두 배로 돌아옵니다.</p>
+
+  <h4>준비물</h4>
+  <ul class="check">
+    <li>공용 보드 1페이지 (피그잼 또는 노션)</li>
+    <li><strong>레퍼런스 해부 3칸 카드</strong> — 인턴 1차 과제 양식과 똑같은 것</li>
+    <li>가설 템플릿 + 예시 카드</li>
+    <li>릴스 포맷 카드 + 캐러셀 표지 템플릿</li>
+    <li>진행자 2명 — 1명 진행, 1명 순회</li>
+    <li>타이머 — 실습마다 실제로 사용</li>
+  </ul>
+
+  <h3>진행자가 반복할 한 문장</h3>
+  <div class="quote">오늘 잘 만들 필요 없습니다. 오늘의 목표는 끝까지 한 번 가보는 겁니다.</div>
+  <p>공고에 쓴 인턴 기간의 정의와 같은 문장입니다. 이 문장을 듣고 지원한 사람은 인턴 기간에도 같은 기준으로 움직입니다.</p>
+</section>
+
+<!-- ============ 7 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">07 / 남는 것</span>
+    <h2>실습 산출물을 그대로 3기 자산으로</h2>
+  </div>
+
+  <div class="scroller">
+    <table>
+      <thead><tr><th>실습</th><th>남는 것</th></tr></thead>
+      <tbody>
+        <tr><td>실습 1 · 레퍼런스 해부</td><td><strong>레퍼런스 해부 카드</strong> 초안 — 참가자 수만큼</td></tr>
+        <tr><td>실습 2 · 가설 쓰기</td><td><strong>훅 라이브러리</strong> 시드</td></tr>
+        <tr><td>실습 1의 &ldquo;타임즈에 적용한다면?&rdquo;</td><td><strong>소재 뱅크</strong> 시드</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>공용 보드를 미리 소재 뱅크 DB와 같은 구조로 만들어두면 옮겨 담을 필요조차 없습니다.</p>
+
+  <h3>확인이 필요한 것</h3>
+  <ul>
+    <li><strong>형식과 길이</strong> — 온/오프라인, 90분 확보 가능 여부. 90분 기본안과 60분 축소안을 준비했습니다.</li>
+    <li><strong>참가자 규모</strong> — 3인 1조 편성과 타이머 운영에 영향을 줍니다.</li>
+  </ul>
+</section>
+
+<footer>
+  <span>이기적 공유회 · 타임즈 3기 안내 회차</span>
+  <span>2026.08.26</span>
+  <span>운영안 본편은 별도 문서</span>
+</footer>
+
+</div>

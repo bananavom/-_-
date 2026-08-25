@@ -1,0 +1,950 @@
+<title>스폰지타임즈 3기 운영안 v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#EDEFEA;
+  --surface:#FFFFFF;
+  --surface-2:#F4F6F1;
+  --ink:#141C17;
+  --muted:#59685F;
+  --faint:#87948B;
+  --line:#D3D9D1;
+  --line-strong:#B6BFB6;
+  --accent:#A31E60;
+  --accent-ink:#A31E60;
+  --accent-soft:#F8E5EE;
+  --teal:#0E6459;
+  --teal-soft:#DDEDE8;
+  --amber:#8A5210;
+  --amber-soft:#F6E9D5;
+  --shadow:0 1px 2px rgba(20,28,23,.05), 0 8px 24px -16px rgba(20,28,23,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101512;
+    --surface:#171E19;
+    --surface-2:#1D2620;
+    --ink:#E6ECE5;
+    --muted:#97A69B;
+    --faint:#738178;
+    --line:#2A352D;
+    --line-strong:#3C4A40;
+    --accent:#F186B4;
+    --accent-ink:#F9A9CB;
+    --accent-soft:#38182A;
+    --teal:#59C8B4;
+    --teal-soft:#11322C;
+    --amber:#DFA75E;
+    --amber-soft:#33240F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101512;
+  --surface:#171E19;
+  --surface-2:#1D2620;
+  --ink:#E6ECE5;
+  --muted:#97A69B;
+  --faint:#738178;
+  --line:#2A352D;
+  --line-strong:#3C4A40;
+  --accent:#F186B4;
+  --accent-ink:#F9A9CB;
+  --accent-soft:#38182A;
+  --teal:#59C8B4;
+  --teal-soft:#11322C;
+  --amber:#DFA75E;
+  --amber-soft:#33240F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+  word-break:keep-all;
+}
+
+.wrap{
+  max-width:60rem;
+  margin:0 auto;
+  padding:0 1.5rem 6rem;
+}
+
+.prose{max-width:60ch}
+
+/* ---------- masthead ---------- */
+
+.masthead{
+  border-bottom:3px solid var(--ink);
+  padding:3.5rem 0 1.25rem;
+  margin-bottom:1rem;
+}
+.kicker{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--accent-ink);
+  margin:0 0 1.1rem;
+}
+.masthead h1{
+  font-family:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  font-weight:900;
+  font-size:clamp(2.4rem,7vw,4rem);
+  line-height:1.04;
+  letter-spacing:-.03em;
+  margin:0;
+  text-wrap:balance;
+}
+.masthead .sub{
+  margin:1.1rem 0 0;
+  font-size:1.05rem;
+  color:var(--muted);
+  max-width:52ch;
+}
+
+.factbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0;
+  border-bottom:1px solid var(--line);
+  margin-bottom:4rem;
+}
+.fact{
+  flex:1 1 8.5rem;
+  padding:.9rem 1rem .9rem 0;
+  border-right:1px solid var(--line);
+}
+.fact:last-child{border-right:0}
+.fact dt{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.66rem;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--faint);
+  margin:0 0 .2rem;
+}
+.fact dd{
+  margin:0;
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1rem;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---------- sections ---------- */
+
+section{margin-bottom:4.5rem}
+
+.sec-head{
+  display:flex;
+  align-items:baseline;
+  gap:.85rem;
+  border-top:1px solid var(--line-strong);
+  padding-top:.9rem;
+  margin-bottom:1.6rem;
+}
+.sec-head .tag{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.68rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--faint);
+  white-space:nowrap;
+  padding-top:.35rem;
+}
+.sec-head h2{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:900;
+  font-size:clamp(1.5rem,3.4vw,2rem);
+  letter-spacing:-.025em;
+  line-height:1.2;
+  margin:0;
+  text-wrap:balance;
+}
+
+h3{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1.15rem;
+  letter-spacing:-.01em;
+  margin:2.4rem 0 .7rem;
+}
+h4{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-weight:600;
+  font-size:.72rem;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--faint);
+  margin:2rem 0 .6rem;
+}
+p{margin:0 0 1rem;max-width:60ch}
+strong{font-weight:600;color:var(--ink)}
+em{font-style:normal;color:var(--accent-ink);font-weight:500}
+
+ul{margin:0 0 1rem;padding-left:1.1rem;max-width:60ch}
+li{margin-bottom:.4rem}
+li::marker{color:var(--faint)}
+
+/* ---------- tables ---------- */
+
+.scroller{
+  overflow-x:auto;
+  margin:1.2rem 0 1.6rem;
+  border:1px solid var(--line);
+  border-radius:2px;
+  background:var(--surface);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.9rem;
+  min-width:34rem;
+}
+thead th{
+  text-align:left;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-weight:500;
+  font-size:.66rem;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  color:var(--faint);
+  padding:.7rem .9rem;
+  border-bottom:1px solid var(--line-strong);
+  background:var(--surface-2);
+  white-space:nowrap;
+}
+tbody td{
+  padding:.72rem .9rem;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+  line-height:1.55;
+}
+tbody tr:last-child td{border-bottom:0}
+td.num,th.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.82rem;white-space:nowrap;color:var(--muted)}
+tr.hi td{background:var(--accent-soft)}
+tr.hi td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+tr.hi strong{color:var(--accent-ink)}
+
+/* ---------- callouts ---------- */
+
+.note{
+  border-left:3px solid var(--accent);
+  background:var(--surface);
+  padding:1.1rem 1.25rem;
+  margin:1.5rem 0;
+  border-radius:0 2px 2px 0;
+  box-shadow:var(--shadow);
+}
+.note.warn{border-left-color:var(--amber)}
+.note.calm{border-left-color:var(--teal)}
+.note p{margin:0}
+.note p + p{margin-top:.7rem}
+.note .lead{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1.02rem;
+  letter-spacing:-.01em;
+}
+
+.quote{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:clamp(1.15rem,2.6vw,1.5rem);
+  line-height:1.45;
+  letter-spacing:-.02em;
+  color:var(--ink);
+  border-top:1px solid var(--line-strong);
+  border-bottom:1px solid var(--line-strong);
+  padding:1.6rem 0;
+  margin:2.2rem 0;
+  max-width:34ch;
+  text-wrap:balance;
+}
+
+/* ---------- day rail ---------- */
+
+.rail{
+  display:grid;
+  gap:0;
+  margin:1.4rem 0 1.8rem;
+  border-top:1px solid var(--line);
+}
+.day{
+  display:grid;
+  grid-template-columns:5.5rem 1fr auto;
+  gap:1rem;
+  align-items:start;
+  padding:.9rem .25rem;
+  border-bottom:1px solid var(--line);
+}
+.day .d{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.75rem;
+  font-weight:500;
+  color:var(--faint);
+  font-variant-numeric:tabular-nums;
+  padding-top:.15rem;
+}
+.day .d b{
+  display:block;
+  color:var(--accent-ink);
+  font-weight:600;
+  font-size:.78rem;
+}
+.day .b{min-width:0}
+.day .b .t{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:.98rem;
+  letter-spacing:-.01em;
+}
+.day .b .x{
+  font-size:.87rem;
+  color:var(--muted);
+  line-height:1.55;
+}
+.due{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.7rem;
+  color:var(--faint);
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  padding-top:.3rem;
+}
+.day.pin{background:var(--surface)}
+.day.pin .b .t{color:var(--accent-ink)}
+
+/* ---------- run sheet ---------- */
+
+.run{
+  display:grid;
+  gap:0;
+  border-top:1px solid var(--line-strong);
+  margin:1.4rem 0 1.8rem;
+}
+.slot{
+  display:grid;
+  grid-template-columns:5.5rem 1fr;
+  gap:1.1rem;
+  padding:1rem .25rem;
+  border-bottom:1px solid var(--line);
+}
+.slot .clock{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.82rem;
+  font-weight:500;
+  font-variant-numeric:tabular-nums;
+  color:var(--ink);
+}
+.slot .clock span{
+  display:block;
+  font-size:.68rem;
+  color:var(--faint);
+  font-weight:400;
+}
+.slot h5{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1rem;
+  letter-spacing:-.01em;
+  margin:0 0 .3rem;
+}
+.slot p{font-size:.9rem;color:var(--muted);margin:0;max-width:56ch}
+.out{
+  display:inline-block;
+  margin-top:.55rem;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.68rem;
+  letter-spacing:.05em;
+  color:var(--teal);
+  background:var(--teal-soft);
+  padding:.22rem .5rem;
+  border-radius:2px;
+}
+.slot.key{background:var(--surface)}
+.slot.key h5{color:var(--accent-ink)}
+
+/* ---------- checklist ---------- */
+
+.check{
+  list-style:none;
+  padding:0;
+  margin:1.1rem 0 1.5rem;
+  border:1px solid var(--line);
+  border-radius:2px;
+  background:var(--surface);
+  max-width:44rem;
+}
+.check li{
+  display:flex;
+  gap:.75rem;
+  align-items:flex-start;
+  padding:.7rem 1rem;
+  border-bottom:1px solid var(--line);
+  margin:0;
+  font-size:.93rem;
+}
+.check li:last-child{border-bottom:0}
+.check li::before{
+  content:"";
+  flex:0 0 auto;
+  width:.95rem;
+  height:.95rem;
+  margin-top:.36rem;
+  border:1.5px solid var(--line-strong);
+  border-radius:2px;
+}
+
+/* ---------- cards ---------- */
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+  gap:1rem;
+  margin:1.3rem 0 1.6rem;
+}
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:2px;
+  padding:1.1rem 1.15rem;
+}
+.card .n{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.66rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--faint);
+  display:block;
+  margin-bottom:.45rem;
+}
+.card h5{
+  font-family:"Gothic A1",sans-serif;
+  font-weight:700;
+  font-size:1.05rem;
+  letter-spacing:-.015em;
+  margin:0 0 .45rem;
+}
+.card p{font-size:.88rem;color:var(--muted);margin:0;max-width:none}
+
+.no{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+  margin:1.1rem 0 1.5rem;
+  padding:0;
+  list-style:none;
+  max-width:none;
+}
+.no li{
+  margin:0;
+  font-size:.87rem;
+  color:var(--muted);
+  border:1px solid var(--line);
+  border-radius:2px;
+  padding:.4rem .7rem;
+  background:var(--surface);
+  text-decoration:line-through;
+  text-decoration-color:var(--amber);
+  text-decoration-thickness:1.5px;
+}
+
+footer{
+  border-top:3px solid var(--ink);
+  padding-top:1.2rem;
+  font-size:.82rem;
+  color:var(--faint);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem 1.5rem;
+}
+
+@media (max-width:640px){
+  .day{grid-template-columns:4.2rem 1fr;}
+  .day .due{grid-column:2;padding-top:.2rem}
+  .slot{grid-template-columns:4.4rem 1fr;gap:.8rem}
+  .fact{flex:1 1 45%;border-right:0}
+  .quote{max-width:none}
+}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="kicker">스폰지클럽 공식 SNS 유닛 · @spongeclub.ai · v2</p>
+  <h1>스폰지타임즈<br>3기 운영안</h1>
+</header>
+
+<dl class="factbar">
+  <div class="fact"><dt>인턴</dt><dd>8/29 – 9/5</dd></div>
+  <div class="fact"><dt>인턴 인원</dt><dd>12명</dd></div>
+  <div class="fact"><dt>정규 발표</dt><dd>9/6 13:00</dd></div>
+  <div class="fact"><dt>정규 체제</dt><dd>6명</dd></div>
+  <div class="fact"><dt>주간 발행</dt><dd>캐러셀 3 · 릴스 3</dd></div>
+  <div class="fact"><dt>목표</dt><dd>팔로워 1,000</dd></div>
+</dl>
+
+<!-- ============ 0 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">00 / 전제</span>
+    <h2>인턴 기간은 성과 구간이 아니라 서로를 알아가는 시간입니다</h2>
+  </div>
+
+  <div class="scroller">
+    <table>
+      <thead><tr><th>구간</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>인턴 기간</td><td>8/29(토) ~ 9/5(토), <strong>12명</strong></td></tr>
+        <tr><td>정규 발표</td><td>9/6(일) 13:00, <strong>4명</strong></td></tr>
+        <tr class="hi"><td><strong>정규 체제</strong></td><td><strong>정규 4명 + 운영 크루 윤 + 유닛장 봄 = 6명</strong></td></tr>
+        <tr><td>발행 포맷</td><td>카드뉴스형 <strong>캐러셀</strong> + 영상형 <strong>릴스</strong>, 둘 다</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>인턴 필수는 세 가지뿐</h4>
+  <ul class="check">
+    <li>가설 한 문장 제출</li>
+    <li>콘텐츠 1건 제작 완료</li>
+    <li>유닛 회의 참석</li>
+  </ul>
+</section>
+
+<!-- ============ 1 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">01 / 인턴 8일</span>
+    <h2>직접 가설을 세우고 검증하는 시간입니다</h2>
+  </div>
+
+  <div class="rail">
+    <div class="day pin">
+      <div class="d"><b>토</b>8/29</div>
+      <div class="b"><div class="t">인원 구성 정식 발표</div><div class="x">인턴 12명 명단 발표. 봄·윤은 고정, 크루장 없음</div></div>
+      <div class="due"></div>
+    </div>
+    <div class="day">
+      <div class="d"><b>토–일</b>8/29–30</div>
+      <div class="b"><div class="t">1차 과제</div><div class="x">① 모집 때 쓴 <strong>관심 있는 계정</strong> 설명 + 그 계정에서 가장 마음에 들었던 <strong>콘텐츠 3개</strong> 찾아오기 &nbsp;② 본인이 <strong>캐러셀을 만들지 영상을 만들지</strong> 고민해 오기</div></div>
+      <div class="due"></div>
+    </div>
+    <div class="day pin">
+      <div class="d"><b>월</b>8/31</div>
+      <div class="b"><div class="t">킥오프 &amp; 1차 유닛 회의</div><div class="x">영상과 캐러셀 중 무엇을 해보고 싶은지 이야기 나누기 · 선정한 계정의 장점을 타임즈와 스폰지클럽에 어떻게 적용할지 <strong>가설 2개 수립</strong></div></div>
+      <div class="due">21:00</div>
+    </div>
+    <div class="day pin">
+      <div class="d"><b>수</b>9/2</div>
+      <div class="b"><div class="t">계획서 제출 → 상호 피드백</div><div class="x">가설을 정리하고 어떤 콘텐츠를 만들지 계획서 제출. 이후 슬랙에서 서로 피드백</div></div>
+      <div class="due">20:00</div>
+    </div>
+    <div class="day pin">
+      <div class="d"><b>토</b>9/5</div>
+      <div class="b"><div class="t">제작 · 발행 마감</div><div class="x">각자 콘텐츠 제작 및 발행. <strong>첫 주는 AI 활용 없이 직접 제작 권장</strong></div></div>
+      <div class="due">12:00 마감</div>
+    </div>
+    <div class="day">
+      <div class="d"><b>일</b>9/6</div>
+      <div class="b"><div class="t">데이터 검증</div><div class="x">24시간 기준 데이터(영상 조회수, 캐러셀 저장·공유 수)로 <strong>세운 가설이 맞았는지 검증</strong></div></div>
+      <div class="due">세션 전</div>
+    </div>
+    <div class="day pin">
+      <div class="d"><b>일</b>9/6</div>
+      <div class="b"><div class="t">세션 — 정규 유닛원 4명 발표</div><div class="x"></div></div>
+      <div class="due">13:00</div>
+    </div>
+  </div>
+
+  <h3>이 일정의 핵심 — 월 · 수 · 토 · 일 네 박자</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th class="num">요일</th><th>하는 일</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">월 21:00</td><td>가설을 세운다</td></tr>
+        <tr><td class="mono">수 20:00</td><td>계획서로 정리한다 → 서로 피드백한다</td></tr>
+        <tr class="hi"><td class="mono">토 12:00</td><td><strong>마감한다</strong></td></tr>
+        <tr><td class="mono">일 13:00</td><td>데이터로 가설을 검증한다</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <p class="lead">토요일은 발행일이나 제작일이 아니라 마감일입니다</p>
+    <p>수요일에 정리된 계획서를 바탕으로 제작해서, 토요일까지는 마감해 올려야 합니다.</p>
+  </div>
+
+  <h3>1차 과제 양식</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>고정 요소</th><th>변수 요소</th><th>후킹 요소</th></tr></thead>
+      <tbody><tr><td>매 편 똑같은 것</td><td>편마다 바뀌는 것</td><td>릴스는 첫 3초 훅 / 캐러셀은 후킹 문구</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="note calm">
+    <p class="lead">이걸 스폰지타임즈에 적용한다면?</p>
+    <p><em>질문 3개와 자막 스타일을 고정하고 사람만 바꾸면, 스폰지 한 명씩 릴스 시리즈로 굴릴 수 있다.</em></p>
+  </div>
+
+  <p>&ldquo;좋았어요, 재밌었어요&rdquo;로 끝나지 말고 고민해 주세요.</p>
+
+  <h3>가설 문장 템플릿</h3>
+  <div class="quote">[누구]에게 [어떤] 훅으로 [어떤] 포맷을 보여주면 [어떤] 반응이 올 것이다.</div>
+  <p style="color:var(--muted);font-size:.92rem"><em>&ldquo;AI 툴을 막 써보기 시작한 사람에게 &lsquo;이거 30분 만에 만들었어요&rsquo;라는 훅으로 비포 애프터 릴스를 보여주면 저장이 평균보다 높을 것이다.&rdquo;</em></p>
+
+  <div class="note calm">
+    <p class="lead">&ldquo;어떤 반응&rdquo;에 반드시 측정 가능한 지표가 들어가야 합니다</p>
+    <p>저장, 공유, 조회수, 프로필 방문.</p>
+    <p>&ldquo;반응이 좋을 것이다&rdquo;로 쓰면 일요일에 맞았는지 틀렸는지 판단할 수가 없습니다.</p>
+    <p>가설 2개를 세우고, 수요일 계획서에서 <strong>그중 이번 주에 실제로 검증할 하나</strong>를 고릅니다.</p>
+  </div>
+
+  <h3>킥오프 &amp; 1차 유닛 회의 — 8/31(월) 21:00</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th class="num">순서</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1</td><td>인원 소개 · 8일 일정과 필수 3가지 안내 · 정규 선발 기준 공개</td></tr>
+        <tr><td class="mono">2</td><td>1차 과제 공유 — 관심 계정과 콘텐츠 3개를 3칸으로</td></tr>
+        <tr><td class="mono">3</td><td><strong>영상과 캐러셀 중 무엇을 해보고 싶은지 이야기 나누기</strong></td></tr>
+        <tr><td class="mono">4</td><td><strong>가설 2개 수립</strong></td></tr>
+        <tr><td class="mono">5</td><td>수요일 계획서 양식 안내 · 슬랙 피드백 방식 안내</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>12명이면 공유만으로도 시간이 꽤 듭니다. <strong>1인 1분 타이머를 실제로 씁니다.</strong> 안 그러면 가설 수립 시간이 사라지고, 그러면 이번 주 루프가 첫 칸부터 비어버립니다.</p>
+
+  <h3>왜 첫 주는 AI 없이 직접 만드는가</h3>
+  <div class="scroller">
+    <table>
+      <tbody>
+        <tr><td><strong>원칙</strong></td><td>첫 주는 AI 없이 직접 제작</td></tr>
+        <tr><td><strong>이유</strong></td><td>손으로 한 번 만들어봐야 AI가 무엇을 대신해주는지 알 수 있습니다</td></tr>
+        <tr><td><strong>구체적으로</strong></td><td>자막 한 줄을 몇 자로 끊어야 읽히는지, 캐러셀 표지에서 왜 손이 멈추는지</td></tr>
+        <tr><td><strong>안 그러면</strong></td><td>&ldquo;그럴듯한데 안 터지는&rdquo; 결과물이 나오고, 왜 안 됐는지도 모릅니다</td></tr>
+        <tr><td><strong>그다음</strong></td><td>2주차부터 AI 도입. 첫 주의 수작업 경험이 콘텐츠 브리프 스킬의 요구사항을 만들어줍니다</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>이탈 방지</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>장치</th><th>규칙</th><th>왜</th></tr></thead>
+      <tbody>
+        <tr><td><strong>데일리 스탬프</strong></td><td>하루 한 줄. <strong>&ldquo;못 했음&rdquo;도 유효한 스탬프</strong></td><td>못 한 걸 말할 수 있어야 다음 날 돌아옵니다</td></tr>
+        <tr><td><strong>DM 1회</strong></td><td>48시간 무응답이면 한 번만. 그 이상은 추적하지 않음</td><td>부담을 주는 순간 공고에 쓴 톤과 어긋납니다</td></tr>
+        <tr><td><strong>30% 규칙</strong></td><td>수요일 계획서는 완성본이 아님</td><td>완성본을 요구하면 아무도 안 올리고, 상호 피드백 단계가 통째로 비어버립니다</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">02 / 4개 자리</span>
+    <h2>정규 자리가 아니라 8일 동안 겪는 경험 단위</h2>
+  </div>
+
+  <p>인턴 12명 <strong>전원이</strong> 8일 안에 <em>가설 수립 → 제작 → 배포 → 데이터 분석 → 다음 소재 적용</em>을 한 바퀴 돌아야 합니다. 네 개 자리는 이 사이클의 네 국면입니다.</p>
+
+  <div class="scroller">
+    <table>
+      <thead><tr><th>자리</th><th>언제 겪나</th><th>무엇을 하나</th></tr></thead>
+      <tbody>
+        <tr><td><strong>릴스 기획·출연</strong></td><td class="mono">월 회의 ~ 토</td><td>훅 설계, 촬영, 편집</td></tr>
+        <tr><td><strong>캐러셀·정보 콘텐츠</strong></td><td class="mono">월 회의 ~ 토</td><td>표지·본문·CTA 구조 설계</td></tr>
+        <tr><td><strong>데이터·계정 분석</strong></td><td class="mono">일</td><td>24시간 지표 확인, 가설 검증</td></tr>
+        <tr><td><strong>소재 발굴</strong></td><td class="mono">월 회의</td><td>관심 계정에서 뜯어온 것을 타임즈 소재로 옮기기</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note calm">
+    <p class="lead">전담자를 두지 않는 이유</p>
+    <p>일정이 이미 답을 갖고 있습니다. <strong>일요일 데이터 검증은 전원이 하고, 월요일 소재 발굴도 회의에서 다 같이 합니다.</strong> 주간 루프에 박혀 있는 공통 루틴이지 누군가의 자리가 아닙니다.</p>
+    <p><strong>정규 4명도 역할을 나눠 맡지 않습니다. 전원이 매주 콘텐츠를 만듭니다.</strong> 영상 특화 2명 / 캐러셀 특화 2명은 무게중심일 뿐, 관리자가 아니라 제작자로 들어옵니다.</p>
+  </div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">03 / 선발</span>
+    <h2>정규 유닛원 4명</h2>
+  </div>
+
+  <h4>1차 · 자격 게이트 — 전원 동일, 통과 여부만</h4>
+  <ul class="check">
+    <li>가설 한 문장 제출</li>
+    <li>콘텐츠 1건 제작 완료</li>
+    <li>유닛 회의 참석</li>
+  </ul>
+
+  <h4>2차 · 구성</h4>
+  <p><strong>영상 특화 2명 + 콘텐츠(캐러셀) 특화 2명.</strong></p>
+  <p>다만 특화는 무게중심일 뿐이고, <strong>캐러셀과 영상을 모두 다룰 수 있는 사람</strong>이 기본 전제입니다. 6명이 각자 주 1건을 만드는 체제라 한쪽만 되는 사람이 있으면 그 주의 배분이 바로 무너집니다. 네 명 모두 <em>관리자가 아니라 제작자</em>로 들어옵니다.</p>
+
+  <div class="note warn">
+    <p><strong>지표 수치는 선발 기준에서 제외합니다.</strong> 인턴 기간 콘텐츠는 애초에 팔로워 계획에 포함하지 않기로 한 데다, 조회수는 운이 크게 작용합니다. 보는 것은 8일을 어떻게 통과했는지와 어느 쪽 제작에 맞는지입니다.</p>
+  </div>
+
+  <h3>비선발 인원 — 소재뱅크 기여자 트랙</h3>
+  <p>정식 유닛원은 아니지만 계속 참여할 수 있는 자리를 함께 제시합니다. 스폰지클럽에서 일어나는 일을 소재로 물어다 주는 역할입니다.</p>
+  <p>그리고 이분들께 <strong>공용·범용 「캐러셀 OS」</strong> 를 드립니다. 인턴 기간에 12명이 함께 만든 것이라, 위로가 아니라 <em>본인이 만든 것을 가져가는 것</em>이 됩니다.</p>
+</section>
+
+<!-- ============ 4 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">04 / 6인 체제</span>
+    <h2>1인 1건, 캐러셀 3 + 릴스 3</h2>
+  </div>
+
+  <p><strong>6명 전원이 매주 각자 1건씩 만듭니다.</strong> 봄과 윤도 예외가 아닙니다. 누구도 관리만 하지 않습니다.</p>
+
+  <div class="scroller">
+    <table>
+      <thead><tr><th>라인</th><th>사람</th><th class="num">주간</th></tr></thead>
+      <tbody>
+        <tr><td><strong>영상 (릴스)</strong></td><td>윤 · 정규 A · 정규 B</td><td class="num">3건</td></tr>
+        <tr><td><strong>캐러셀</strong></td><td>봄 · 정규 C · 정규 D</td><td class="num">3건</td></tr>
+        <tr class="hi"><td colspan="2"><strong>합계</strong></td><td class="num"><strong>주 6건</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>특화 배정(영상 2 / 캐러셀 2)이 봄·윤과 맞물려 정확히 <strong>3 : 3</strong>으로 떨어집니다.</p>
+
+  <div class="note">
+    <p class="lead">하한선은 주 4건 — 영상 2 + 캐러셀 2</p>
+    <p>누군가 한 주를 못 넘겼을 때의 마지노선이고, 이 밑으로 내려가면 공고의 &ldquo;주 4건 이상&rdquo; 약속이 깨집니다. 목표는 어디까지나 6건입니다.</p>
+    <p><strong>「1소재 2포맷」</strong> — 릴스 1건을 캐러셀로 재활용하면 제작 1건으로 인정합니다. 제작비가 거의 0인데 큐가 두 배로 차고, 한 명이 빠진 주에 하한선 4건을 지켜내는 유일한 완충 장치입니다.</p>
+  </div>
+
+  <h3>역할</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>역할</th><th>사람</th><th>제작</th><th>오너십</th></tr></thead>
+      <tbody>
+        <tr><td>유닛장</td><td><strong>봄</strong></td><td>캐러셀 주 1건</td><td>편집장 겸 — 발행 캘린더, 회의 진행</td></tr>
+        <tr><td>운영 크루</td><td><strong>윤</strong></td><td>릴스 주 1건</td><td>영상 총괄</td></tr>
+        <tr><td>정규 A · B</td><td>신규</td><td>릴스 각 1건</td><td>영상 특화</td></tr>
+        <tr><td>정규 C · D</td><td>신규</td><td>캐러셀 각 1건</td><td>캐러셀 특화</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:.9rem;color:var(--muted)">데이터 분석과 소재 발굴은 전담이 아니라 6명 전원의 주간 루틴입니다 (일요일 검증 / 월요일 회의).</p>
+
+  <div class="note warn">
+    <p class="lead">윤은 본인 릴스 1건 + 영상 총괄 + 남의 릴스 검수를 동시에 집니다</p>
+    <p>개별 편집까지 윤이 하면 3기의 발행 속도 상한이 윤의 작업 속도가 됩니다. 윤의 세부 역할 범위는 별도 논의가 필요합니다.</p>
+  </div>
+
+  <h3>릴스와 캐러셀이 맡는 구간이 다릅니다</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th></th><th>릴스</th><th>캐러셀</th></tr></thead>
+      <tbody>
+        <tr><td>주목적</td><td><strong>비팔로워 도달</strong></td><td>피드에 들어왔을 때 <strong>&ldquo;알찬 콘텐츠가 있다&rdquo;고 인지</strong></td></tr>
+        <tr><td>만나는 지점</td><td>탐색 탭 · 추천 피드</td><td>프로필 방문 후 그리드</td></tr>
+        <tr><td>미는 지표</td><td>도달 · 프로필 방문</td><td><strong>팔로우 전환</strong> · 저장</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>팔로워는 <strong>도달 → 프로필 방문 → 팔로우 전환</strong> 순서로 늘어납니다. <strong>릴스가 앞의 두 단계를, 캐러셀이 마지막 단계를 담당합니다.</strong> 릴스만 잘 만들면 사람들이 프로필에 들어왔다가 그냥 나갑니다. 캐러셀 3건이 매주 필요한 이유가 여기 있습니다 — 장식이 아니라 전환 장치입니다.</p>
+
+  <h3>팔로워 1,000 역산</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>시나리오</th><th class="num">릴스 도달</th><th class="num">프로필 방문</th><th class="num">팔로우 전환</th><th class="num">건당 유입</th><th class="num">주 릴스</th><th class="num">1,000까지</th></tr></thead>
+      <tbody>
+        <tr><td>A · 현상 유지</td><td class="num">800</td><td class="num">3%</td><td class="num">20%</td><td class="num">4.8명</td><td class="num">3건</td><td class="num">약 69주</td></tr>
+        <tr><td>B · 도달만 개선</td><td class="num">2,500</td><td class="num">4%</td><td class="num">20%</td><td class="num">20명</td><td class="num">3건</td><td class="num">약 17주</td></tr>
+        <tr class="hi"><td><strong>C · 도달 + 전환 개선</strong></td><td class="num">2,500</td><td class="num">4%</td><td class="num">35%</td><td class="num"><strong>35명</strong></td><td class="num">3건</td><td class="num"><strong>약 10주</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>B → C의 차이가 캐러셀이 만드는 전환율입니다.</strong> 릴스를 아무리 잘 만들어도 프로필이 비어 보이면 거기서 끝납니다. 반대로 캐러셀만 쌓으면 애초에 프로필에 오는 사람이 없습니다. 둘 다 필요하고, 그래서 3 : 3입니다.</p>
+
+  <div class="note">
+    <p class="lead">KPI 두 개 — 릴스 평균 도달 · 팔로우 전환율</p>
+    <p>하위 지표는 저장·공유(도달을 다시 밀어올림)와 프로필 방문 수. 팔로워 수는 결과 지표로만 봅니다. 이 표에 <strong>인턴 기간 콘텐츠는 들어가지 않습니다</strong> — 9/6 정규 시작 이후 기준이고, 가정치이므로 첫 2주 실측으로 교체해야 합니다.</p>
+  </div>
+
+  <h3>포맷 — 릴스 주 3건</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>포맷</th><th>형태</th><th>고정 요소</th><th>변수</th><th>제작 방식</th></tr></thead>
+      <tbody>
+        <tr><td><strong>스폰지 인터뷰</strong></td><td class="mono">20초</td><td>질문 세트, 자막 스타일</td><td>사람</td><td><strong>3주차 오프라인에서 몰아 촬영</strong> 후 순차 발행</td></tr>
+        <tr><td><strong>정규 세션 · 이기적 공유회 릴스</strong></td><td class="mono">20–40초</td><td>현장 컷 → 하이라이트 → 한 줄 인사이트</td><td>세션 회차</td><td>세션 영상 소스 재활용</td></tr>
+        <tr><td><strong>이걸 AI로?</strong></td><td class="mono">20–30초</td><td>결과물을 첫 3초에 선공개 → 제작자 태그 → 과정 3컷</td><td>소재·툴</td><td>개별 제작</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note calm">
+    <p><strong>인터뷰는 배치 촬영이 핵심입니다.</strong> 3주차 오프라인 때 인터뷰이를 몰아서 찍어두고 점차 발행하면, 매주 섭외하고 매주 찍는 부담이 사라지고 몇 주치 재고가 한 번에 생깁니다. 릴스 라인에서 가장 안정적인 공급원이 됩니다.</p>
+  </div>
+
+  <h3>포맷 — 캐러셀 주 3건</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>유형</th><th class="num">분량</th><th>내용</th><th class="num">비중</th></tr></thead>
+      <tbody>
+        <tr><td><strong>이기적 공유회 — 소개</strong></td><td class="num">6–8장</td><td>그 주에 열리는 이기적 공유회를 소개</td><td class="num">주 1건</td></tr>
+        <tr><td><strong>이기적 공유회 — 후기</strong></td><td class="num">6–8장</td><td>공유회를 보고 쓴 후기. 재밌었던 점 · 관심 있었던 내용 · 새로 배운 스킬</td><td class="num">주 1건</td></tr>
+        <tr><td><strong>가십 · 후킹형</strong></td><td class="num">1–3장</td><td>가볍고 재밌는 클럽 소식</td><td class="num">주 1건</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul>
+    <li>「타임즈 위클리」는 <strong>「이기적 공유회」</strong> 로 명칭을 바꾸고 <strong>소개편과 후기편 2건</strong>으로 나눕니다. 공유회 전에 소개가 나가고, 공유회가 끝나면 후기가 나갑니다.</li>
+    <li>「툴 한 장」식 단순 툴 소개는 접습니다. 툴 자체보다 <strong>세션에서 무엇이 재밌었고 무엇을 새로 배웠는지</strong>가 훨씬 강합니다.</li>
+    <li>캐러셀은 정보 전달이 목적이라 <strong>내용이 탄탄해야</strong> 합니다. 그래서 무게 있는 정보형 2건에 가벼운 가십 1건을 섞습니다 — 정보형만 이어지면 피드가 무거워지고, 가십만 있으면 &ldquo;알찬 계정&rdquo;으로 안 보입니다.</li>
+  </ul>
+
+  <h3>스토리 — 매주 일요일</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>누가</th><th>언제</th><th class="num">몇 건</th></tr></thead>
+      <tbody>
+        <tr><td><strong>봄</strong></td><td>일요일 정규 세션 시간</td><td class="num">세션 진행 중</td></tr>
+        <tr><td><strong>유닛원 전원</strong></td><td>정규 세션 시작 때 또는 중간 쉬는 시간</td><td class="num"><strong>1인 1건</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>발행 건수(주 6건)에는 포함하지 않습니다 — 24시간이면 사라지고, 도달이 아니라 <strong>살아 있는 계정이라는 신호</strong>가 목적입니다.</p>
+
+  <h3>리스크</h3>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>리스크</th><th>대응</th></tr></thead>
+      <tbody>
+        <tr><td>크루장이 없어 12명 관리가 봄에게 집중</td><td>데일리 스탬프로 비동기 확인, 개별 추적은 DM 1회까지</td></tr>
+        <tr><td>봄·윤이 제작과 운영을 겸함</td><td>봄은 캐러셀 1건, 윤은 릴스 1건까지만. 대신 만들어주지 않기</td></tr>
+        <tr><td>월요일 회의에서 공유가 길어져 가설 시간이 사라짐</td><td>1인 1분 타이머 실제 사용</td></tr>
+        <tr><td>한 명이 빠져 주 6건 붕괴</td><td>하한선 4건 + 「1소재 2포맷」으로 큐를 1주치 앞서 채우기</td></tr>
+        <tr><td>인터뷰 재고 소진</td><td>3주차 배치 촬영 분량을 발행 주기로 나눠 계산해두기</td></tr>
+        <tr><td>툴 난립으로 시간 낭비</td><td>유닛 표준 툴 세트 3개로 고정 (2주차부터)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 5 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">05 / 프로덕트</span>
+    <h2>무엇을 만들어두고 시작할 것인가</h2>
+  </div>
+
+  <h4>P0 — 8/29 전에 있어야 하는 것: 양식 4종</h4>
+  <p>첫 주는 AI 없이 직접 만들기 때문에, 지금 필요한 건 도구가 아니라 <strong>양식</strong>입니다. 주간 루프의 네 박자에 하나씩 붙습니다.</p>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>양식</th><th>언제</th><th>무엇을 담나</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1차 과제 양식</strong></td><td class="mono">8/29 배포</td><td>관심 계정 + 콘텐츠 3개를 <code>고정 / 변수 / 첫 3초 훅</code> 3칸으로. 마지막에 &ldquo;타임즈에 적용한다면?&rdquo;</td></tr>
+        <tr><td><strong>가설 양식</strong></td><td class="mono">8/31 회의</td><td>템플릿 문장 + 예시 + 측정 지표 칸 (저장·공유·조회수 중 택1)</td></tr>
+        <tr><td><strong>계획서 양식</strong></td><td class="mono">9/2 제출</td><td>검증할 가설 1개 · 포맷 · 훅 · 구성 · 발행 예정 시각</td></tr>
+        <tr><td><strong>데이터 확인 양식</strong></td><td class="mono">9/6 세션 전</td><td>24시간 지표 · 가설이 맞았나 · 다음에 바꿀 것 하나</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <p>네 양식이 <strong>한 줄로 이어져야</strong> 합니다. 1차 과제의 &ldquo;적용한다면?&rdquo;이 가설이 되고, 가설이 계획서가 되고, 계획서의 지표 칸이 데이터 확인 칸과 같아야 합니다. 양식이 따로 놀면 일요일에 검증할 게 없어집니다.</p>
+  </div>
+
+  <h4>P0.5 — 소재 뱅크 &amp; 발행 캘린더 (노션 DB 1개)</h4>
+  <p>필드 — 소재 · 포맷 · 가설 · 담당 · 상태 · 발행 예정일 · 조회수 · 저장 · 공유 · 프로필 방문 · 검증 결과</p>
+  <p><strong>가설과 지표가 같은 행에 있어야</strong> 검증이 됩니다. 위 양식 4종을 이 DB 하나의 뷰로 만들면 파일이 흩어지지 않습니다.</p>
+
+  <h4>P1 — 인턴 기간 중 함께 만드는 것</h4>
+  <div class="cards">
+    <div class="card">
+      <span class="n">P1 · 01</span>
+      <h5>캐러셀 OS</h5>
+      <p>표지·본문·마지막 장 구조 규칙 + 카피 프레임 + 캔바 템플릿 + 제작 순서 체크리스트. <strong>타임즈 브랜딩을 뺀 범용 버전</strong> — 비선발 인원이 본인 계정이나 업무에 그대로 쓸 수 있게.</p>
+    </div>
+    <div class="card">
+      <span class="n">P1 · 02</span>
+      <h5>레퍼런스 해부 카드</h5>
+      <p>1차 과제 12명분이 그대로 축적됩니다. 8/31 회의가 곧 수집 시점.</p>
+    </div>
+    <div class="card">
+      <span class="n">P1 · 03</span>
+      <h5>훅 라이브러리</h5>
+      <p>검증된 훅 문장 DB. 일요일 검증 결과와 연결해 쌓습니다.</p>
+    </div>
+    <div class="card">
+      <span class="n">P1 · 04</span>
+      <h5>계정 분석 스킬</h5>
+      <p>인사이트 → 주간 리포트 + 상위 3건 공통점 + 다음 주 가설 3개. 공고에 이미 지원 항목으로 약속된 것.</p>
+    </div>
+  </div>
+
+  <h4>P2 — 정규 2주차부터 (AI 도입 시점)</h4>
+  <div class="scroller">
+    <table>
+      <thead><tr><th>프로덕트</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td><strong>콘텐츠 브리프 스킬</strong></td><td>소재 한 줄 → 훅 3안 / 구성 / 자막 / 캡션 / 해시태그. <strong>릴스 모드와 캐러셀 모드 둘 다.</strong> 첫 주 수작업 경험이 이 스킬의 요구사항을 만들어줍니다</td></tr>
+        <tr><td><strong>포맷 템플릿 팩</strong></td><td>캔바 4종(릴스 2 + 캐러셀 2) + 자막 스타일 + 썸네일 규격</td></tr>
+        <tr><td><strong>리믹스 스킬</strong></td><td>릴스 대본 ↔ 캐러셀 카피 ↔ 캡션. 「1소재 2포맷」 규칙의 실행 도구</td></tr>
+        <tr><td><strong>기수 아카이브</strong></td><td>발행물 + 지표 + 검증 결과. 4기의 출발 자산</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>사람이 익혀야 할 스킬</h3>
+  <ul>
+    <li><strong>첫 3초 훅 설계</strong> — KPI의 절반이 도달이므로 여기에 가장 큰 비중</li>
+    <li><strong>자막 리듬</strong> — 1줄 12자 내외, 0.8~1.2초 노출</li>
+    <li><strong>캐러셀 정보 설계</strong> — 표지에서 멈추게 하고 마지막 장에서 저장하게 만드는 구조</li>
+    <li><strong>인스타그램 인사이트 독해</strong> — 도달과 조회의 차이, 저장·공유가 도달을 만드는 경로</li>
+    <li><strong>가설 쓰기</strong> — 측정 가능한 지표가 들어간 한 문장</li>
+    <li><strong>유닛 표준 툴 세트 확정</strong> (2주차) — 영상 1개 + 이미지 1개 + 편집 1개로 못 박기</li>
+  </ul>
+</section>
+
+<!-- ============ 6 ============ -->
+<section>
+  <div class="sec-head">
+    <span class="tag">06 / 확인 요청</span>
+    <h2>아직 채워지지 않은 칸</h2>
+  </div>
+  <ul>
+    <li><strong>8/29(토) &ldquo;정식 발표&rdquo;의 대상</strong> — 인턴 12명 명단 발표로 해석했습니다. 정규 4명 발표는 9/6</li>
+    <li><strong>&ldquo;가설 한 문장&rdquo;(필수 제출물) vs &ldquo;가설 2개 수립&rdquo;(월요일 회의)</strong> — 회의에서 2개를 세우고 수요일 계획서에서 1개를 골라 검증하는 것으로 정리했습니다</li>
+    <li><strong>3주차 오프라인 인터뷰 촬영 분량</strong> — 몇 명을 찍어두면 몇 주치가 되는지 역산해둬야 재고가 끊기지 않습니다</li>
+    <li><strong>일요일 스토리 담당</strong> — 세션 참석자 중 당번 로테이션으로 제안했습니다</li>
+    <li><strong>현재 팔로워 수</strong> — 04장 역산의 시작점입니다</li>
+  </ul>
+  <p style="font-size:.9rem;color:var(--muted)">8/26 이기적 공유회 진행안은 별도 문서로 분리했습니다.</p>
+</section>
+
+<footer>
+  <span>스폰지타임즈 3기 운영안 v2</span>
+  <span>2026.08.24 작성</span>
+  <span>instagram.com/spongeclub.ai</span>
+</footer>
+
+</div>
