@@ -1,0 +1,80 @@
+{
+  "_comment": "스폰지클럽 3기 오프라인 모임 · 모션 포스터 레이아웃 스펙. 좌표는 모두 0..1 정규화 (x = px/포스터폭, y = px/포스터높이). 기준 원본: 946x1683 (9:16). 원본 포스터를 교체하면 이 값만 미세 조정하면 된다.",
+
+  "canvas": { "width": 1080, "height": 1920, "fps": 30, "duration": 67.0 },
+
+  "photos": [
+    { "id": "tl_main",   "box": [0.021, 0.015, 0.529, 0.225], "wave": 0, "feather": 26 },
+    { "id": "tr_screen", "box": [0.529, 0.024, 1.000, 0.208], "wave": 0, "feather": 26 },
+
+    { "id": "l_talk",    "box": [0.000, 0.225, 0.317, 0.386], "wave": 1, "feather": 26 },
+    { "id": "r_table",   "box": [0.618, 0.205, 1.000, 0.336], "wave": 1, "feather": 26 },
+
+    { "id": "r_people",  "box": [0.634, 0.333, 1.000, 0.469], "wave": 2, "feather": 26 },
+    { "id": "l_mid",     "box": [0.000, 0.383, 0.296, 0.538], "wave": 2, "feather": 55, "kenburns": { "amp": 0.030, "period": 44.0, "phase": 0.55 } },
+
+    { "id": "r_mid",     "box": [0.703, 0.466, 1.000, 0.618], "wave": 3, "feather": 55, "kenburns": { "amp": 0.038, "period": 38.0, "phase": 0.28 } },
+    { "id": "l_low",     "box": [0.000, 0.535, 0.283, 0.689], "wave": 3, "feather": 26 },
+
+    { "id": "r_low",     "box": [0.729, 0.615, 1.000, 0.767], "wave": 4, "feather": 26 },
+    { "id": "c_hero",    "box": [0.259, 0.665, 0.740, 0.835], "wave": 4, "feather": 55, "kenburns": { "amp": 0.050, "period": 30.0, "phase": 0.00 } },
+
+    { "id": "l_b1",      "box": [0.000, 0.686, 0.296, 0.862], "wave": 5, "feather": 26 },
+    { "id": "r_b1",      "box": [0.650, 0.764, 1.000, 0.927], "wave": 5, "feather": 26 },
+
+    { "id": "l_b2",      "box": [0.000, 0.859, 0.317, 1.000], "wave": 6, "feather": 26 },
+    { "id": "c_b",       "box": [0.301, 0.832, 0.682, 1.000], "wave": 6, "feather": 26 },
+    { "id": "r_b2",      "box": [0.666, 0.918, 1.000, 1.000], "wave": 6, "feather": 26 }
+  ],
+
+  "sprites": [
+    { "id": "title1", "motion": "rise",      "box": [0.196, 0.345, 0.809, 0.393], "key": "white",  "note": "스폰지클럽 3기" },
+    { "id": "title2", "motion": "pop",      "box": [0.148, 0.403, 0.861, 0.475], "key": "yellow", "note": "오프라인 모임" },
+    { "id": "underline", "motion": "wipe_lr",   "box": [0.159, 0.481, 0.851, 0.502], "key": "yellow", "note": "노란 밑줄" },
+    { "id": "sub1", "motion": "fade_rise",        "box": [0.264, 0.518, 0.740, 0.552], "key": "white",  "note": "온라인에서 함께한 우리," },
+    { "id": "sub2", "motion": "fade_rise",        "box": [0.312, 0.562, 0.708, 0.599], "key": "white",  "note": "드디어 만나요." },
+    { "id": "circle", "motion": "draw_arc",      "box": [0.330, 0.556, 0.500, 0.606], "key": "yellow", "note": "드디어를 감싼 손그림 원" },
+    { "id": "datetape", "motion": "wipe_lr_drop",    "box": [0.305, 0.610, 0.698, 0.652], "key": "rect",   "note": "2026. 09. 05 SAT 종이테이프" },
+
+    { "id": "heart_title", "motion": "pop_bounce", "box": [0.866, 0.456, 0.936, 0.494], "key": "pink",   "note": "오프라인 모임 옆 하트" },
+    { "id": "heart_sub", "motion": "pop_bounce",   "box": [0.652, 0.560, 0.744, 0.602], "key": "pink",   "note": "만나요 옆 하트" },
+    { "id": "slashes", "motion": "pop",     "box": [0.052, 0.388, 0.150, 0.450], "key": "pink",   "note": "핑크 사선" },
+
+    { "id": "star_a", "motion": "twinkle",      "box": [0.386, 0.207, 0.454, 0.251], "key": "white",  "note": "별 (작은 흰 별)" },
+    { "id": "star_b", "motion": "twinkle",      "box": [0.535, 0.215, 0.668, 0.305], "key": "yellow", "note": "별 (노랑 2개 — 붙어 있어 한 덩어리로 처리)" },
+
+    { "id": "doodle_bt", "motion": "wipe_lr_soft",   "box": [0.038, 0.055, 0.322, 0.122], "key": "chalk",  "note": "Better Together" },
+    { "id": "doodle_gv", "motion": "wipe_lr_soft",   "box": [0.032, 0.786, 0.206, 0.854], "key": "chalk",  "note": "Good Vibes" },
+    { "id": "doodle_sc", "motion": "wipe_lr_soft",   "box": [0.772, 0.890, 0.967, 0.964], "key": "chalk",  "note": "Sponge Club" }
+  ],
+
+  "keys": {
+    "white":  { "lum": [0.66, 0.86], "sat_max": 0.30, "min_area": 40 },
+    "yellow": { "hue": [34, 68], "sat_min": 0.30, "val_min": 0.50, "min_area": 30 },
+    "pink":   { "hue": [310, 372], "sat_min": 0.18, "val_min": 0.42, "min_area": 24 },
+    "chalk":  { "lum": [0.50, 0.80], "sat_max": 0.34, "min_area": 30 }
+  },
+
+  "timeline": {
+    "tiles":      { "start": 0.55, "wave_gap": 0.28, "intra_gap": 0.13, "dur": 0.62 },
+    "plate":      { "start": 3.30, "dur": 0.80 },
+    "title1":     { "start": 4.30, "dur": 0.95 },
+    "title2":     { "start": 5.25, "dur": 0.80 },
+    "underline":  { "start": 6.05, "dur": 0.90 },
+    "sub1":       { "start": 7.15, "dur": 0.80 },
+    "sub2":       { "start": 7.50, "dur": 0.80 },
+    "circle":     { "start": 8.35, "dur": 0.95 },
+    "datetape":   { "start": 9.10, "dur": 0.85 },
+    "slashes":    { "start": 5.90, "dur": 0.50 },
+    "heart_title":{ "start": 6.30, "dur": 0.60 },
+    "heart_sub":  { "start": 8.50, "dur": 0.60 },
+    "star_a":     { "start": 4.90, "dur": 0.70 },
+    "star_b":     { "start": 5.60, "dur": 0.70 },
+    "doodle_bt":  { "start": 6.60, "dur": 0.90 },
+    "doodle_gv":  { "start": 7.40, "dur": 0.90 },
+    "doodle_sc":  { "start": 8.10, "dur": 0.90 },
+
+    "ambient":    { "in_start": 10.5, "in_end": 13.5, "out_start": 59.0, "out_end": 62.0 },
+    "outro":      { "start": 63.9, "stagger": 0.09, "dur": 2.50, "blank_tail": 0.05 }
+  }
+}

@@ -1,0 +1,6 @@
+build/
+out/*.mp4
+# 원본 포스터는 사용자 자산이라 커밋하지 않는다.
+# 원본이 없을 때는 src/make_reference_poster.py 로 대역 포스터를 만들어 파이프라인을 돌린다.
+assets/poster.png
+assets/fonts/

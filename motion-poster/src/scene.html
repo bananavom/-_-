@@ -1,0 +1,294 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>스폰지클럽 3기 오프라인 모임 · 모션 포스터</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #000; overflow: hidden; }
+  #stage {
+    position: relative; overflow: hidden;
+    transform-origin: 50% 50%;
+    background: var(--paper, #141210);
+  }
+  #stage img { position: absolute; display: block; }
+  #board { position: absolute; inset: 0; transform-origin: 50% 50%; }
+  /* 종이 질감 · 가장자리 비네트 — 스크랩북 바탕 */
+  #grain, #sweep { position: absolute; inset: 0; pointer-events: none; }
+  #grain { opacity: .028; mix-blend-mode: overlay; background-repeat: repeat; }
+  #sweep {
+    mix-blend-mode: soft-light; opacity: 0;
+    background: linear-gradient(104deg,
+      rgba(255,255,255,0) 34%, rgba(255,255,255,.85) 50%, rgba(255,255,255,0) 66%);
+  }
+</style>
+
+<div id="stage"><div id="board"></div><div id="grain"></div><div id="sweep"></div></div>
+
+<script>
+// ─────────────────────────────────────────────────────────────── easing
+const clamp01 = x => x < 0 ? 0 : x > 1 ? 1 : x;
+const smooth  = x => { x = clamp01(x); return x * x * (3 - 2 * x); };
+const outCubic = x => 1 - Math.pow(1 - clamp01(x), 3);
+const outQuint = x => 1 - Math.pow(1 - clamp01(x), 5);
+const outQuad  = x => 1 - Math.pow(1 - clamp01(x), 2);
+const inOutCubic = x => (x = clamp01(x)) < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2, 3)/2;
+
+// 95% → 103% → 100% 짧은 POP
+function popScale(p) {
+  p = clamp01(p);
+  if (p < .42) return 0.95 + (1.03 - 0.95) * outQuad(p / .42);
+  return 1.03 + (1.00 - 1.03) * smooth((p - .42) / .58);
+}
+// 짧게 튕겼다 잦아드는 바운스 (0 → 1 → 0)
+function bounce(t, period, offset) {
+  const ph = (((t - offset) % period) + period) % period;
+  if (ph > 0.95) return 0;
+  const x = ph / 0.95;
+  return Math.sin(Math.PI * x * 2) * Math.exp(-3.4 * x);
+}
+const osc = (t, period, phase) => 0.5 - 0.5 * Math.cos(2 * Math.PI * ((t / period) + (phase || 0)));
+
+// ─────────────────────────────────────────────────────────────── build
+let META = null, LAYERS = {}, TL = null, OUTRO_GROUP = {}, READY = false;
+
+// 아웃트로 소멸 순서 = 등장 역순 (그룹 단위)
+const OUTRO_ORDER = [
+  ['datetape', 'circle', 'heart_sub', 'doodle_sc'],
+  ['sub2', 'sub1', 'doodle_gv'],
+  ['doodle_bt', 'heart_title', 'underline', 'star_b', 'star_a', 'slashes'],
+  ['title2'],
+  ['title1'],
+  ['@tile6', '@tile5', '@tile4'],
+  ['@tile3', '@tile2', '@tile1', '@tile0', '@plate'],
+];
+
+async function build(meta, base) {
+  META = meta;
+  TL = meta.timeline;
+  OUTRO_ORDER.forEach((g, i) => g.forEach(k => { OUTRO_GROUP[k] = i; }));
+
+  const stage = document.getElementById('stage');
+  const board = document.getElementById('board');
+  const { width: W, height: H } = meta.canvas;
+  stage.style.width = W + 'px';
+  stage.style.height = H + 'px';
+  stage.style.setProperty('--paper', meta.paper || '#141210');
+  document.getElementById('grain').style.backgroundImage = `url("${base}grain.png")`;
+
+  const pending = [];
+  const add = (rec, cls) => {
+    const im = document.createElement('img');
+    im.src = base + rec.file;
+    im.style.left = rec.x + 'px';
+    im.style.top = rec.y + 'px';
+    im.style.width = rec.w + 'px';
+    im.style.height = rec.h + 'px';
+    im.style.transformOrigin = '50% 50%';
+    im.className = cls;
+    board.appendChild(im);
+    pending.push(im.decode().catch(() => {}));
+    return im;
+  };
+
+  // plate: 글자를 지운 사진 콜라주 판 (타일 아래에 깔려 이음매를 덮는다)
+  LAYERS.plate = { el: add({ file: 'plate.png', x: 0, y: 0, w: W, h: H }, 'plate'), rec: null };
+
+  LAYERS.tiles = meta.photos.map(p => ({ rec: p, el: add(p, 'tile') }));
+  LAYERS.sprites = meta.sprites.map(s => ({ rec: s, el: add(s, 'sprite') }));
+
+  // 아웃트로 목록에서 빠진 스프라이트는 끝까지 남아 루프를 깨뜨린다 — 조기에 잡는다.
+  const missing = meta.sprites.map(s => s.id).filter(id => !(id in OUTRO_GROUP));
+  if (missing.length) throw new Error('OUTRO_ORDER 에 누락된 스프라이트: ' + missing.join(', '));
+
+  await Promise.all(pending);
+  seek(0);
+  READY = true;
+}
+
+// ─────────────────────────────────────────────────────────────── timeline
+function tileTiming(wave, idxInWave) {
+  const c = TL.tiles;
+  return { start: c.start + wave * c.wave_gap + idxInWave * c.intra_gap, dur: c.dur };
+}
+
+// 아웃트로 진행도 (0 = 그대로, 1 = 사라짐)
+function outroP(t, key) {
+  const o = TL.outro;
+  const g = OUTRO_GROUP[key];
+  if (g === undefined) return 0;
+  return smooth((t - (o.start + g * o.stagger)) / o.dur);
+}
+
+function ambientEnv(t) {
+  const a = TL.ambient;
+  return smooth((t - a.in_start) / (a.in_end - a.in_start)) *
+         (1 - smooth((t - a.out_start) / (a.out_end - a.out_start)));
+}
+
+function setMaskLR(el, e, softPct) {
+  // 좌 → 우 마스크 리빌. softPct 만큼 가장자리를 흐리게 하면 손으로 그은 느낌이 난다.
+  const span = 100 + softPct;
+  const b = e * span, a = b - softPct;
+  const g = `linear-gradient(90deg, #000 ${a.toFixed(2)}%, rgba(0,0,0,0) ${b.toFixed(2)}%)`;
+  el.style.webkitMaskImage = g;
+  el.style.maskImage = g;
+}
+
+function setMaskArc(el, e) {
+  // 손그림 원 드로잉: 원의 중심 기준 각도 스윕 (왼쪽 위에서 시작해 시계방향)
+  const deg = e * 374;                       // 살짝 겹쳐 그리는 오버슛
+  const soft = 7;
+  const g = `conic-gradient(from 202deg at 50% 50%, #000 0deg, ` +
+            `#000 ${Math.max(0, deg - soft).toFixed(2)}deg, rgba(0,0,0,0) ${deg.toFixed(2)}deg)`;
+  el.style.webkitMaskImage = g;
+  el.style.maskImage = g;
+}
+
+function clearMask(el) { el.style.webkitMaskImage = 'none'; el.style.maskImage = 'none'; }
+
+// ─────────────────────────────────────────────────────────────── seek
+function seek(t) {
+  const A = ambientEnv(t);
+  const kbT = t - TL.ambient.in_start;
+
+  // 전체 보드의 아주 미세한 숨쉬기
+  const breathe = 1 + 0.006 * A * osc(t, 26, 0);
+  document.getElementById('board').style.transform = `scale(${breathe.toFixed(5)})`;
+
+  // 종이 위를 아주 천천히 지나가는 빛
+  const sw = document.getElementById('sweep');
+  sw.style.display = A < 0.004 ? 'none' : 'block';     // 안 보일 땐 합성 자체를 건너뛴다
+  if (A >= 0.004) {
+    sw.style.opacity = (0.055 * A).toFixed(4);
+    sw.style.transform = `translateX(${(-130 + 260 * osc(t, 22, 0.15)).toFixed(2)}%)`;
+  }
+
+  // --- plate ---
+  const plateE = smooth((t - TL.plate.start) / TL.plate.dur);
+  LAYERS.plate.el.style.opacity = (plateE * (1 - outroP(t, '@plate'))).toFixed(4);
+
+  // --- 사진 타일: 스크랩북에 한 장씩 붙이듯 그룹 단위로 등장 ---
+  const waveCount = {};
+  LAYERS.tiles.forEach(({ rec, el }) => {
+    const w = rec.wave || 0;
+    const i = (waveCount[w] = (waveCount[w] || 0) + 1) - 1;
+    const { start, dur } = tileTiming(w, i);
+    const p = clamp01((t - start) / dur);
+    const e = outQuint(p);
+    const o = outroP(t, '@tile' + w);
+
+    // 등장: 살짝 크게·기울어진 상태에서 제자리로 내려앉는다
+    const seed = (rec.id.charCodeAt(0) + rec.id.length * 7) % 5 - 2;   // -2..2
+    const sc = (1.055 - 0.055 * e) * (1 - 0.018 * o);
+    const rot = seed * 0.55 * (1 - e);
+    const dy = 9 * (1 - e) + 7 * o;
+
+    // 등장이 끝나고 Ken Burns 도 없는 타일은 바로 아래 plate 와 픽셀이 같다.
+    // plate 가 완전히 불투명해진 뒤에는 숨겨도 결과가 동일하고, 합성 비용이 크게 준다.
+    const dormant = plateE >= 0.999 && p >= 1 && !rec.kenburns && o <= 0;
+    el.style.display = dormant ? 'none' : 'block';
+    if (dormant) return;
+
+    let kb = 1;
+    if (rec.kenburns) {                         // 중심 사진에만 느린 Ken Burns
+      kb = 1 + rec.kenburns.amp * A * osc(kbT, rec.kenburns.period, rec.kenburns.phase);
+    }
+    el.style.opacity = (e * (1 - o)).toFixed(4);
+    el.style.transform =
+      `translate(0px, ${dy.toFixed(2)}px) rotate(${rot.toFixed(3)}deg) scale(${(sc * kb).toFixed(5)})`;
+  });
+
+  // --- 글자 · 낙서 스프라이트 ---
+  LAYERS.sprites.forEach(({ rec, el }) => {
+    const c = TL[rec.id] || { start: 6, dur: 0.8 };
+    const p = clamp01((t - c.start) / c.dur);
+    const o = outroP(t, rec.id);
+    let op = 1, tf = '', dy = 0, dx = 0, sc = 1, rot = 0;
+
+    switch (rec.motion) {
+      case 'rise': {                              // 스폰지클럽 3기 — 아래에서 부드럽게
+        const e = outQuint(p);
+        op = outCubic(clamp01(p * 1.6));
+        dy = 46 * (1 - e);
+        sc = 0.986 + 0.014 * e;
+        clearMask(el);
+        break;
+      }
+      case 'pop': {                               // 오프라인 모임 — 95→103→100
+        op = outCubic(clamp01(p * 2.6));
+        sc = p > 0 ? popScale(p) : 0.95;
+        clearMask(el);
+        break;
+      }
+      case 'wipe_lr': {                           // 노란 밑줄 — 손으로 그은 드로잉
+        const e = inOutCubic(p);
+        op = p > 0 ? 1 : 0;
+        setMaskLR(el, e, 4);
+        break;
+      }
+      case 'wipe_lr_soft': {                      // 손글씨 낙서
+        const e = inOutCubic(p);
+        op = outCubic(clamp01(p * 1.8));
+        setMaskLR(el, e, 22);
+        break;
+      }
+      case 'fade_rise': {                         // 한 박자 늦게 페이드인
+        const e = outCubic(p);
+        op = e;
+        dy = 10 * (1 - e);
+        clearMask(el);
+        break;
+      }
+      case 'draw_arc': {                          // 드디어를 감싼 원 — 손그림 드로잉
+        const e = inOutCubic(p);
+        op = p > 0 ? 1 : 0;
+        setMaskArc(el, e);
+        break;
+      }
+      case 'wipe_lr_drop': {                      // 날짜 — 좌→우 마스크 리빌
+        const e = inOutCubic(p);
+        const s = outCubic(p);
+        op = p > 0 ? 1 : 0;
+        dy = -7 * (1 - s);
+        rot = 1.1 * (1 - s);
+        setMaskLR(el, e, 6);
+        break;
+      }
+      case 'pop_bounce': {                        // 하트 — 작은 바운스
+        op = outCubic(p);
+        sc = 0.80 + 0.20 * outQuint(p) + 0.10 * Math.sin(Math.PI * clamp01(p * 1.15));
+        const per = rec.id === 'heart_sub' ? 9.0 : 11.5;
+        dy = -5.0 * A * bounce(t, per, rec.id === 'heart_sub' ? 2.2 : 6.4);
+        clearMask(el);
+        break;
+      }
+      case 'twinkle': {                           // 별 — 딱 한 번만 반짝
+        const e = outCubic(p);
+        op = clamp01(p * 3);
+        sc = 0.45 + 0.55 * e + 0.30 * Math.sin(Math.PI * clamp01(p * 1.25));
+        rot = 24 * (1 - e);
+        clearMask(el);
+        break;
+      }
+      default: {
+        op = outCubic(p);
+        clearMask(el);
+      }
+    }
+
+    // 은은하게 흔들리는 낙서는 일부만
+    if (rec.id === 'doodle_bt') rot += 0.70 * A * Math.sin(2 * Math.PI * t / 9.0);
+    if (rec.id === 'doodle_sc') rot += -0.60 * A * Math.sin(2 * Math.PI * t / 11.0 + 1.1);
+
+    op *= (1 - o);
+    dy += 6 * o;
+    sc *= (1 - 0.02 * o);
+
+    el.style.opacity = op.toFixed(4);
+    el.style.transform =
+      `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) rotate(${rot.toFixed(3)}deg) scale(${sc.toFixed(5)})`;
+  });
+}
+
+window.__build = build;
+window.__seek = t => { seek(t); return true; };
+window.__ready = () => READY;
+</script>
