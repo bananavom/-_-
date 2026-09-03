@@ -15,8 +15,11 @@ import argparse
 import glob
 import os
 import json
+import re
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import imageio_ffmpeg
@@ -50,6 +53,18 @@ def open_page(pw, w: int, h: int):
     )
     page.wait_for_function("window.__ready && window.__ready()", timeout=120_000)
     return browser, page
+
+
+def count_frames(ff: str, path: Path) -> int:
+    """인코딩된 파일의 실제 프레임 수를 센다."""
+    r = subprocess.run(
+        [ff, "-hide_banner", "-i", str(path), "-map", "0:v", "-c", "copy", "-f", "null", "-"],
+        capture_output=True, text=True,
+    )
+    last = 0
+    for m in re.finditer(r"frame=\s*(\d+)", r.stderr):
+        last = int(m.group(1))
+    return last
 
 
 def encode_cmd(ff: str, fps: int, crf: int, dst: Path) -> list[str]:
@@ -101,47 +116,55 @@ def render(args) -> None:
     ff = imageio_ffmpeg.get_ffmpeg_exe()
     jobs = max(1, min(args.jobs, n))
 
-    # 프레임 캡처 비용은 사실상 전부 브라우저의 PNG 인코딩이라, 코어 수만큼
-    # 프로세스를 띄워 구간을 나눠 렌더한 뒤 세그먼트를 이어 붙인다.
-    print(f"렌더 {n} 프레임 ({t0:.2f}s → {t1:.2f}s @ {FPS}fps, {W}x{H}), 워커 {jobs}개")
-    bounds = [round(n * i / jobs) for i in range(jobs + 1)]
-    segs = [str(OUTDIR / f"_seg{i:02d}.mp4") for i in range(jobs)]
-    work = [
-        (i, t0, bounds[i], bounds[i + 1] - bounds[i], FPS, args.crf, W, H, segs[i])
-        for i in range(jobs)
-    ]
+    # 세그먼트는 실행마다 고유한 디렉터리에 쓴다. 같은 이름을 공유하면 렌더가 두 개
+    # 겹쳐 돌 때 서로의 파일을 덮어써서, 조용히 잘린 결과물이 나온다.
+    tmp = Path(tempfile.mkdtemp(prefix="segs_", dir=OUTDIR))
+    try:
+        # 프레임 캡처 비용은 사실상 전부 브라우저의 PNG 인코딩이라, 코어 수만큼
+        # 프로세스를 띄워 구간을 나눠 렌더한 뒤 세그먼트를 이어 붙인다.
+        print(f"렌더 {n} 프레임 ({t0:.2f}s → {t1:.2f}s @ {FPS}fps, {W}x{H}), 워커 {jobs}개")
+        bounds = [round(n * i / jobs) for i in range(jobs + 1)]
+        segs = [str(tmp / f"seg{i:02d}.mp4") for i in range(jobs)]
+        work = [
+            (i, t0, bounds[i], bounds[i + 1] - bounds[i], FPS, args.crf, W, H, segs[i])
+            for i in range(jobs)
+        ]
 
-    if jobs == 1:
-        render_chunk(work[0])
-    else:
-        import multiprocessing as mp
+        if jobs == 1:
+            render_chunk(work[0])
+        else:
+            import multiprocessing as mp
 
-        with mp.get_context("spawn").Pool(jobs) as pool:
-            pool.map(render_chunk, work)
+            with mp.get_context("spawn").Pool(jobs) as pool:
+                pool.map(render_chunk, work)
 
-    if jobs == 1:
-        Path(segs[0]).replace(out)
-    else:
-        lst = OUTDIR / "_concat.txt"
-        lst.write_text("".join(f"file '{s}'\n" for s in segs), encoding="utf-8")
-        r = subprocess.run(
-            [ff, "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
-             "-i", str(lst), "-c", "copy", "-movflags", "+faststart", str(out)]
-        )
-        if r.returncode != 0:
-            sys.exit("세그먼트 이어붙이기 실패")
-        for s in segs:
-            Path(s).unlink(missing_ok=True)
-        lst.unlink(missing_ok=True)
+        if jobs == 1:
+            Path(segs[0]).replace(out)
+        else:
+            lst = tmp / "concat.txt"
+            lst.write_text("".join(f"file '{s}'\n" for s in segs), encoding="utf-8")
+            r = subprocess.run(
+                [ff, "-y", "-loglevel", "error", "-f", "concat", "-safe", "0",
+                 "-i", str(lst), "-c", "copy", "-movflags", "+faststart", str(out)]
+            )
+            if r.returncode != 0:
+                sys.exit("세그먼트 이어붙이기 실패")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
-    size = out.stat().st_size
-    print(f"\n완료 → {out}  ({size/1e6:.2f} MB)")
+    # 결과물이 실제로 요청한 길이만큼 나왔는지 확인한다. 워커나 이어붙이기가
+    # 조용히 실패하면 짧은 영상이 남는데, 재생해 보기 전엔 알아채기 어렵다.
+    got = count_frames(ff, out)
+    print(f"\n완료 → {out}  ({out.stat().st_size/1e6:.2f} MB)")
     probe = subprocess.run(
         [ff, "-hide_banner", "-i", str(out)], capture_output=True, text=True
     ).stderr
     for line in probe.splitlines():
         if "Duration" in line or "Stream #0" in line:
             print("  " + line.strip())
+    if got != n:
+        sys.exit(f"\n프레임 수가 맞지 않습니다: {got} (기대값 {n}). 렌더가 중간에 실패했습니다.")
+    print(f"  프레임 {got}/{n} 확인")
 
 
 def preview(args) -> None:
