@@ -56,9 +56,13 @@ def open_page(pw, w: int, h: int):
 
 
 def count_frames(ff: str, path: Path) -> int:
-    """인코딩된 파일의 실제 프레임 수를 센다."""
+    """
+    인코딩된 파일의 실제 프레임 수를 센다.
+    -c copy 로는 frame= 카운터가 나오지 않으므로 실제로 디코드한다 (67초에 약 4초).
+    """
     r = subprocess.run(
-        [ff, "-hide_banner", "-i", str(path), "-map", "0:v", "-c", "copy", "-f", "null", "-"],
+        [ff, "-hide_banner", "-v", "error", "-stats", "-i", str(path),
+         "-map", "0:v", "-f", "null", "-"],
         capture_output=True, text=True,
     )
     last = 0
