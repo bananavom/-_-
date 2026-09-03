@@ -51,9 +51,10 @@ let META = null, LAYERS = {}, TL = null, OUTRO_GROUP = {}, READY = false;
 
 // 아웃트로 소멸 순서 = 등장 역순 (그룹 단위)
 const OUTRO_ORDER = [
-  ['datetape', 'circle', 'heart_sub', 'doodle_sc'],
-  ['sub2', 'sub1', 'doodle_gv'],
-  ['doodle_bt', 'heart_title', 'underline', 'star_b', 'star_a', 'slashes'],
+  ['date', 'heart_green', 'doodle_sc'],
+  ['circle', 'heart_pink', 'doodle_gv'],
+  ['sub2', 'sub1'],
+  ['doodle_bt', 'star_pink', 'star_y', 'slashes'],
   ['title2'],
   ['title1'],
   ['@tile6', '@tile5', '@tile4'],
@@ -255,8 +256,8 @@ function seek(t) {
       case 'pop_bounce': {                        // 하트 — 작은 바운스
         op = outCubic(p);
         sc = 0.80 + 0.20 * outQuint(p) + 0.10 * Math.sin(Math.PI * clamp01(p * 1.15));
-        const per = rec.id === 'heart_sub' ? 9.0 : 11.5;
-        dy = -5.0 * A * bounce(t, per, rec.id === 'heart_sub' ? 2.2 : 6.4);
+        const per = rec.id === 'heart_pink' ? 9.0 : 11.5;
+        dy = -5.0 * A * bounce(t, per, rec.id === 'heart_pink' ? 2.2 : 6.4);
         clearMask(el);
         break;
       }

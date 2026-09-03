@@ -161,7 +161,8 @@ def key_alpha(crop: np.ndarray, key: str, cfg: dict) -> np.ndarray:
     h, s, v = rgb_to_hsv(crop)
     lum = 0.2126 * crop[..., 0] + 0.7152 * crop[..., 1] + 0.0722 * crop[..., 2]
 
-    if key in ("white", "chalk"):
+    # 키 종류는 이름이 아니라 설정 모양으로 정한다 (스펙에 새 키를 넣어도 그대로 동작).
+    if "lum" in cfg:
         lo, hi = cfg["lum"]
         a = smoothstep(lo, hi, lum)
         smax = cfg["sat_max"]
