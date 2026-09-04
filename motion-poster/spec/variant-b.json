@@ -1,0 +1,52 @@
+{
+  "_comment": "연출 B — '메시지 먼저, 기억이 모인다'. 포스터와 레이어는 A(spec/layout.json)와 완전히 동일하고, 등장 순서·타이밍·Ken Burns 세기·소멸 순서만 덮어쓴다. A 는 사진을 다 붙인 뒤 타이틀이 올라오지만, B 는 빈 보드에 타이틀이 먼저 뜨고 사진이 중앙에서 바깥으로 모여든 뒤, 끝에는 역순으로 빠지며 타이틀이 마지막까지 남는다. src/make_variant.py 가 build/layers/meta.json 에 이 값을 얹어 meta-b.json 을 만든다.",
+
+  "photo_wave": {
+    "m_left": 0, "c_group": 0,
+    "m_right": 1, "l_crowd": 1,
+    "r_crowd": 2, "l_talk": 2,
+    "b_center": 3, "r_table": 3,
+    "t_left": 4, "t_screen": 4,
+    "b_left": 5, "b_right": 5
+  },
+
+  "kenburns": {
+    "c_group":  { "amp": 0.070, "period": 31.0, "phase": 0.00 },
+    "b_center": { "amp": 0.050, "period": 39.0, "phase": 0.28 },
+    "t_left":   { "amp": 0.042, "period": 45.0, "phase": 0.55 },
+    "l_talk":   { "amp": 0.030, "period": 52.0, "phase": 0.72 }
+  },
+
+  "timeline": {
+    "title1":      { "start": 0.35, "dur": 0.95 },
+    "title2":      { "start": 1.10, "dur": 0.85 },
+    "tiles":       { "start": 1.80, "wave_gap": 0.45, "intra_gap": 0.16, "dur": 0.70 },
+    "plate":       { "start": 4.20, "dur": 0.80 },
+    "slashes":     { "start": 2.00, "dur": 0.50 },
+    "star_y":      { "start": 2.60, "dur": 0.70 },
+    "star_pink":   { "start": 3.40, "dur": 0.70 },
+    "doodle_bt":   { "start": 5.00, "dur": 0.90 },
+    "sub1":        { "start": 5.20, "dur": 0.80 },
+    "sub2":        { "start": 5.55, "dur": 0.80 },
+    "doodle_gv":   { "start": 5.60, "dur": 0.90 },
+    "doodle_sc":   { "start": 6.20, "dur": 0.90 },
+    "circle":      { "start": 6.25, "dur": 0.95 },
+    "heart_pink":  { "start": 6.60, "dur": 0.60 },
+    "date":        { "start": 7.10, "dur": 0.85 },
+    "heart_green": { "start": 7.00, "dur": 0.60 },
+
+    "ambient":     { "in_start": 9.0, "in_end": 12.0, "out_start": 59.0, "out_end": 62.0 },
+    "outro":       { "start": 63.9, "stagger": 0.075, "dur": 2.40, "blank_tail": 0.05 }
+  },
+
+  "outro_order": [
+    ["date", "heart_green", "doodle_sc"],
+    ["circle", "heart_pink", "doodle_gv"],
+    ["sub2", "sub1", "doodle_bt"],
+    ["@tile5", "@tile4", "star_pink", "star_y", "slashes"],
+    ["@tile3", "@tile2"],
+    ["@tile1", "@tile0", "@plate"],
+    ["title2"],
+    ["title1"]
+  ]
+}

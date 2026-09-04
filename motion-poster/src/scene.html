@@ -49,8 +49,9 @@ const osc = (t, period, phase) => 0.5 - 0.5 * Math.cos(2 * Math.PI * ((t / perio
 // ─────────────────────────────────────────────────────────────── build
 let META = null, LAYERS = {}, TL = null, OUTRO_GROUP = {}, READY = false;
 
-// 아웃트로 소멸 순서 = 등장 역순 (그룹 단위)
-const OUTRO_ORDER = [
+// 아웃트로 소멸 순서 (그룹 단위). 보통 등장 역순이지만 연출마다 다르므로
+// meta.outro_order 로 받는다. '@tileN' 은 N 번째 웨이브 사진, '@plate' 는 바탕 판.
+const DEFAULT_OUTRO_ORDER = [
   ['date', 'heart_green', 'doodle_sc'],
   ['circle', 'heart_pink', 'doodle_gv'],
   ['sub2', 'sub1'],
@@ -64,7 +65,8 @@ const OUTRO_ORDER = [
 async function build(meta, base) {
   META = meta;
   TL = meta.timeline;
-  OUTRO_ORDER.forEach((g, i) => g.forEach(k => { OUTRO_GROUP[k] = i; }));
+  const order = meta.outro_order || DEFAULT_OUTRO_ORDER;
+  order.forEach((g, i) => g.forEach(k => { OUTRO_GROUP[k] = i; }));
 
   const stage = document.getElementById('stage');
   const board = document.getElementById('board');
@@ -97,7 +99,10 @@ async function build(meta, base) {
 
   // 아웃트로 목록에서 빠진 스프라이트는 끝까지 남아 루프를 깨뜨린다 — 조기에 잡는다.
   const missing = meta.sprites.map(s => s.id).filter(id => !(id in OUTRO_GROUP));
-  if (missing.length) throw new Error('OUTRO_ORDER 에 누락된 스프라이트: ' + missing.join(', '));
+  if (missing.length) throw new Error('아웃트로 순서에 누락된 스프라이트: ' + missing.join(', '));
+  const waves = [...new Set(meta.photos.map(p => p.wave || 0))];
+  const mw = waves.filter(w => !(('@tile' + w) in OUTRO_GROUP));
+  if (mw.length) throw new Error('아웃트로 순서에 누락된 사진 웨이브: ' + mw.join(', '));
 
   await Promise.all(pending);
   seek(0);

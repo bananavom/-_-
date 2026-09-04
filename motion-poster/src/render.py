@@ -32,7 +32,7 @@ CHROME = sorted(glob.glob("/opt/pw-browsers/chromium-*/chrome-linux/chrome"))
 CHROME = CHROME[-1] if CHROME else None
 
 
-def open_page(pw, w: int, h: int):
+def open_page(pw, w: int, h: int, meta_name: str = "meta.json"):
     browser = pw.chromium.launch(
         executable_path=CHROME,
         args=[
@@ -46,7 +46,7 @@ def open_page(pw, w: int, h: int):
     )
     page = browser.new_page(viewport={"width": w, "height": h}, device_scale_factor=1)
     page.goto((ROOT / "src" / "scene.html").as_uri())
-    meta = json.loads((LAYERS / "meta.json").read_text(encoding="utf-8"))
+    meta = json.loads((LAYERS / meta_name).read_text(encoding="utf-8"))
     page.evaluate(
         "async ([meta, base]) => { await window.__build(meta, base); }",
         [meta, LAYERS.as_uri() + "/"],
@@ -88,13 +88,13 @@ def encode_cmd(ff: str, fps: int, crf: int, dst: Path) -> list[str]:
 
 def render_chunk(job: tuple) -> str:
     """프레임 구간 하나를 렌더해 세그먼트 MP4 로 인코딩한다 (워커 프로세스에서 실행)."""
-    idx, t0, i0, count, fps, crf, w, h, dst, speed = job
+    idx, t0, i0, count, fps, crf, w, h, dst, speed, meta_name = job
     from playwright.sync_api import sync_playwright
 
     ff = imageio_ffmpeg.get_ffmpeg_exe()
     proc = subprocess.Popen(encode_cmd(ff, fps, crf, Path(dst)), stdin=subprocess.PIPE)
     with sync_playwright() as pw:
-        browser, page = open_page(pw, w, h)
+        browser, page = open_page(pw, w, h, meta_name)
         for k in range(count):
             # 배속은 프레임을 버리는 게 아니라 씬 시간을 건너뛰며 새로 그린다.
             # 그래야 빠른 동작(POP·드로잉)도 배속 상태에서 30fps 로 매끄럽다.
@@ -110,7 +110,7 @@ def render_chunk(job: tuple) -> str:
 
 
 def render(args) -> None:
-    meta = json.loads((LAYERS / "meta.json").read_text(encoding="utf-8"))
+    meta = json.loads((LAYERS / args.meta).read_text(encoding="utf-8"))
     c = meta["canvas"]
     W, H, FPS = c["width"], c["height"], c["fps"]
     t0 = args.start if args.start is not None else 0.0
@@ -134,7 +134,8 @@ def render(args) -> None:
         bounds = [round(n * i / jobs) for i in range(jobs + 1)]
         segs = [str(tmp / f"seg{i:02d}.mp4") for i in range(jobs)]
         work = [
-            (i, t0, bounds[i], bounds[i + 1] - bounds[i], FPS, args.crf, W, H, segs[i], speed)
+            (i, t0, bounds[i], bounds[i + 1] - bounds[i], FPS, args.crf, W, H, segs[i],
+             speed, args.meta)
             for i in range(jobs)
         ]
 
@@ -179,7 +180,7 @@ def preview(args) -> None:
     """1초 간격 스틸을 뽑아 타이밍을 눈으로 확인하기 위한 컨택트 시트."""
     from playwright.sync_api import sync_playwright
 
-    meta = json.loads((LAYERS / "meta.json").read_text(encoding="utf-8"))
+    meta = json.loads((LAYERS / args.meta).read_text(encoding="utf-8"))
     c = meta["canvas"]
     W, H = c["width"], c["height"]
     shots = args.times or [0.0, 1.2, 2.4, 3.6, 4.9, 5.7, 6.6, 7.8, 9.0, 9.9,
@@ -187,7 +188,7 @@ def preview(args) -> None:
     d = ROOT / "build" / "preview"
     d.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as pw:
-        browser, page = open_page(pw, W, H)
+        browser, page = open_page(pw, W, H, args.meta)
         for t in shots:
             page.evaluate("t => window.__seek(t)", t)
             page.locator("#stage").screenshot(path=str(d / f"t{t:06.2f}.png"))
@@ -206,8 +207,10 @@ if __name__ == "__main__":
     ap.add_argument("--speed", type=float, default=1.0,
                     help="재생 배속. 2 면 절반 길이로, 매 프레임을 새로 그려 렌더한다")
     ap.add_argument("--jobs", type=int, default=min(4, os.cpu_count() or 1))
+    ap.add_argument("--meta", default="meta.json",
+                    help="build/layers 안의 meta 파일명. 다른 연출은 make_variant.py 로 만든다")
     ap.add_argument("--out", default="sponge-club-3rd-offline.mp4")
     a = ap.parse_args()
-    if not (LAYERS / "meta.json").exists():
+    if not (LAYERS / a.meta).exists():
         sys.exit("먼저 src/extract_layers.py 를 실행해 레이어를 만들어 주세요.")
     (preview if a.preview else render)(a)
