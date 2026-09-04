@@ -88,7 +88,7 @@ def encode_cmd(ff: str, fps: int, crf: int, dst: Path) -> list[str]:
 
 def render_chunk(job: tuple) -> str:
     """프레임 구간 하나를 렌더해 세그먼트 MP4 로 인코딩한다 (워커 프로세스에서 실행)."""
-    idx, t0, i0, count, fps, crf, w, h, dst = job
+    idx, t0, i0, count, fps, crf, w, h, dst, speed = job
     from playwright.sync_api import sync_playwright
 
     ff = imageio_ffmpeg.get_ffmpeg_exe()
@@ -96,7 +96,9 @@ def render_chunk(job: tuple) -> str:
     with sync_playwright() as pw:
         browser, page = open_page(pw, w, h)
         for k in range(count):
-            page.evaluate("t => window.__seek(t)", t0 + (i0 + k) / fps)
+            # 배속은 프레임을 버리는 게 아니라 씬 시간을 건너뛰며 새로 그린다.
+            # 그래야 빠른 동작(POP·드로잉)도 배속 상태에서 30fps 로 매끄럽다.
+            page.evaluate("t => window.__seek(t)", t0 + (i0 + k) * speed / fps)
             proc.stdin.write(page.screenshot(type="png", animations="disabled"))
             if k % 60 == 0:
                 print(f"    [워커 {idx}] {k}/{count}", flush=True)
@@ -113,7 +115,8 @@ def render(args) -> None:
     W, H, FPS = c["width"], c["height"], c["fps"]
     t0 = args.start if args.start is not None else 0.0
     t1 = args.end if args.end is not None else c["duration"]
-    n = int(round((t1 - t0) * FPS))
+    speed = max(0.05, args.speed)
+    n = int(round((t1 - t0) / speed * FPS))          # 출력 프레임 수 (배속 반영)
 
     OUTDIR.mkdir(parents=True, exist_ok=True)
     out = OUTDIR / args.out
@@ -126,11 +129,12 @@ def render(args) -> None:
     try:
         # 프레임 캡처 비용은 사실상 전부 브라우저의 PNG 인코딩이라, 코어 수만큼
         # 프로세스를 띄워 구간을 나눠 렌더한 뒤 세그먼트를 이어 붙인다.
-        print(f"렌더 {n} 프레임 ({t0:.2f}s → {t1:.2f}s @ {FPS}fps, {W}x{H}), 워커 {jobs}개")
+        spd = "" if speed == 1.0 else f", {speed:g}배속 → 출력 {n/FPS:.2f}s"
+        print(f"렌더 {n} 프레임 ({t0:.2f}s → {t1:.2f}s @ {FPS}fps, {W}x{H}), 워커 {jobs}개{spd}")
         bounds = [round(n * i / jobs) for i in range(jobs + 1)]
         segs = [str(tmp / f"seg{i:02d}.mp4") for i in range(jobs)]
         work = [
-            (i, t0, bounds[i], bounds[i + 1] - bounds[i], FPS, args.crf, W, H, segs[i])
+            (i, t0, bounds[i], bounds[i + 1] - bounds[i], FPS, args.crf, W, H, segs[i], speed)
             for i in range(jobs)
         ]
 
@@ -199,6 +203,8 @@ if __name__ == "__main__":
     ap.add_argument("--from", dest="start", type=float, default=None)
     ap.add_argument("--to", dest="end", type=float, default=None)
     ap.add_argument("--crf", type=int, default=18)
+    ap.add_argument("--speed", type=float, default=1.0,
+                    help="재생 배속. 2 면 절반 길이로, 매 프레임을 새로 그려 렌더한다")
     ap.add_argument("--jobs", type=int, default=min(4, os.cpu_count() or 1))
     ap.add_argument("--out", default="sponge-club-3rd-offline.mp4")
     a = ap.parse_args()
